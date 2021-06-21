@@ -1,5 +1,13 @@
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+.history/
+
 node_modules
 build
+etc
 
 .DS_Store
 .env.local

@@ -1,23 +1,14 @@
-import path from 'path'
-import Koa from 'koa'
-import Router from 'koa-router'
-import serve from 'koa-static'
+import { app } from './app'
+import { initializeDatabase } from './db'
 
 const port = 8080
-const react = path.join(__dirname, '../../furui/build')
 
-const app = new Koa()
-const router = new Router()
+async function main() {
+  await initializeDatabase()
 
-app.use(serve(react))
-app.use(router.routes())
+  app.listen(port, () => {
+    console.log(`listening on :${port}`)
+  })
+}
 
-router.get('/', serve(path.join(react, 'index.html')))
-
-router.get('/api', ctx => {
-  ctx.body = 'hello typescript'
-})
-
-app.listen(port, () => {
-  console.log(`listening on :${port}`)
-})
+main()
