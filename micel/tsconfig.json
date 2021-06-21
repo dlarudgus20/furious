@@ -3,8 +3,6 @@
     "target": "es5",
     "module": "commonjs",
     "outDir": "build",
-    "sourceMap": true,
-    "declaration": true,
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
