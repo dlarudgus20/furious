@@ -1,58 +1,68 @@
+import fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
 import sqlite3 from 'sqlite3'
 import { Database as SqliteDatabase } from 'sqlite'
+import PQueue from 'p-queue'
+import { logger } from './logger'
 
 type SqlDb = SqliteDatabase<sqlite3.Database, sqlite3.Statement>
 
-const directory = path.join(__dirname, '../etc')
-const filename = path.join(directory, 'furisrv.db')
+const dbDirectory = path.join(__dirname, '../etc')
+const dbFilename = path.join(dbDirectory, 'furisrv.db')
 
-const definition = String.raw`
-CREATE TABLE IF NOT EXISTS Users (
-  Id INT PRIMARY KEY,
-  Password TEXT NOT NULL
-);
-`
+const schemaFilename = path.join(__dirname, '../schema.sql')
 
-let initialized = false
+const initializer = new PQueue({ concurrency: 1 })
 
-async function use<T>(fn: (db: SqlDb) => Promise<T>) {
-  const db = new SqliteDatabase({
-    filename,
-    driver: sqlite3.cached.Database,
+export async function getTransaction<T>(fn: (conn: SqlDb) => Promise<T>) {
+  const conn = await initializer.add(async () => {
+    const exists = await fs.promises.access(dbFilename, fs.constants.F_OK)
+      .then(() => true)
+      .catch(() => false)
+
+    const conn = new SqliteDatabase({
+        filename: dbFilename,
+        driver: sqlite3.cached.Database,
+      })
+
+    await mkdirp(dbDirectory)
+    await conn.open()
+
+    if (!exists) {
+      logger.info('create initial database')
+
+      await conn.run('BEGIN;')
+      try {
+        const definition = await fs.promises.readFile(schemaFilename, 'utf8')
+        await conn.exec(definition)
+        await conn.run('COMMIT;')
+      } catch (err) {
+        await conn.run('ROLLBACK;')
+        await conn.close()
+        throw err
+      }
+    }
+
+    return conn
   })
 
   let ret: T
 
-  await mkdirp(directory)
-  await db.open()
-
-  await db.run('BEGIN;')
+  await conn.run('BEGIN;')
   try {
-    ret = await fn(db)
-    await db.run('COMMIT;')
+    ret = await fn(conn)
+    await conn.run('COMMIT;')
   } catch (err) {
-    await db.run('ROLLBACK;')
+    await conn.run('ROLLBACK;')
     throw err
   } finally {
-    await db.close()
+    await conn.close()
   }
 
   return ret
 }
 
-export function useDatabase<T>(fn: (db: SqlDb) => Promise<T>) {
-  if (!initialized) {
-    throw new Error('Database is not initialized')
-  }
-
-  return use(fn)
-}
-
-export async function initializeDatabase() {
-  await use(async db => {
-    db.run(definition)
-  })
-  initialized = true
+export function initializeDatabase() {
+  return getTransaction(async () => {})
 }
