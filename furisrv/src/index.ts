@@ -1,19 +1,21 @@
 import path from 'path'
-import express from 'express'
+import Koa from 'koa'
+import Router from 'koa-router'
+import serve from 'koa-static'
 
-const app = express()
 const port = 8080
-
 const react = path.join(__dirname, '../../furui/build')
 
-app.use('/', express.static(react))
+const app = new Koa()
+const router = new Router()
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(react, 'index.html'))
-})
+app.use(serve(react))
+app.use(router.routes())
 
-app.get('/api', (req, res) => {
-   res.send('hello typescript')
+router.get('/', serve(path.join(react, 'index.html')))
+
+router.get('/api', ctx => {
+  ctx.body = 'hello typescript'
 })
 
 app.listen(port, () => {
