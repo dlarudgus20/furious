@@ -9,6 +9,7 @@ export interface DeviceInfo {
   id: number
   ownerId: number
   name: string
+  isOnline: boolean
 }
 
 const randomBytes = promisify(crypto.randomBytes)
@@ -30,7 +31,7 @@ router.get('/info/:id', async ctx => {
   }
 
   await getTransaction(async conn => {
-    const rows = await conn.all('SELECT Id, OwnerId, Name FROM Devices WHERE Id = ? AND OwnerId = ?;', id, auth.id)
+    const rows = await conn.all('SELECT Id, OwnerId, Name, IsOnline FROM Devices WHERE Id = ? AND OwnerId = ?;', id, auth.id)
 
     if (rows.length === 0) {
       ctx.throw(401)
@@ -40,6 +41,7 @@ router.get('/info/:id', async ctx => {
       id: rows[0].Id,
       ownerId: rows[0].OwnerId,
       name: rows[0].Name,
+      isOnline: !!rows[0].IsOnline,
     }
     ctx.body = info
   })
@@ -54,12 +56,13 @@ router.get('/list', async ctx => {
   }
 
   await getTransaction(async conn => {
-    const rows = await conn.all('SELECT Id, OwnerId, Name FROM Devices WHERE OwnerId = ?;', auth.id)
+    const rows = await conn.all('SELECT Id, OwnerId, Name, IsOnline FROM Devices WHERE OwnerId = ?;', auth.id)
 
     const list: DeviceInfo[] = rows.map(row => ({
       id: rows[0].Id,
       ownerId: rows[0].OwnerId,
       name: rows[0].Name,
+      isOnline: !!rows[0].isOnline,
     }))
     ctx.body = list
   })
@@ -118,6 +121,7 @@ router.post('/new', async ctx => {
       id,
       ownerId: auth.id,
       name,
+      isOnline: false,
     }
 
     ctx.body = info

@@ -6,6 +6,7 @@ import { Add as AddIcon } from '@material-ui/icons'
 import axios from 'axios'
 import { DeviceInfo } from '../types/Device'
 import Paragraph from '../components/Paragraph'
+import OnlineStatus from '../components/OnlineStatus'
 
 const useStyles = makeStyles(theme => createStyles({
   gridList: {
@@ -88,6 +89,11 @@ function DeviceCard(props: { deviceInfo: DeviceInfo, onClick?: () => void }) {
         <Typography variant='h6' gutterBottom>
           {props.deviceInfo.name}
         </Typography>
+        <OnlineStatus
+          value={props.deviceInfo.isOnline}
+          positiveLabel='online'
+          negativeLabel='offline'
+        />
       </CardContent>
       <CardActions>
         <Button color='inherit' onClick={props.onClick}>

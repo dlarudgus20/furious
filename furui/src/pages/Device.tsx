@@ -9,6 +9,7 @@ import { Edit as EditIcon, Check, Clear, ExpandMore } from '@material-ui/icons'
 import axios from 'axios'
 import { DeviceInfo } from '../types/Device'
 import Paragraph from '../components/Paragraph'
+import OnlineStatus from '../components/OnlineStatus'
 
 const useStyles = makeStyles(theme => createStyles({
   paragraph: {
@@ -134,6 +135,12 @@ function DevicePage() {
             }}
           />
         </Box>
+        <OnlineStatus
+          className={classes.item}
+          value={info.isOnline}
+          positiveLabel='Device is online now'
+          negativeLabel='Device is offline now'
+        />
         <Accordion expanded={openSecret} onChange={() => setOpenSecret(!openSecret)}>
           <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography>View Device Secret</Typography>
@@ -172,7 +179,7 @@ function DevicePage() {
       </Paragraph>
       <Paragraph className={classes.paragraph} title='Sensors'>
       </Paragraph>
-      <Paragraph className={classes.paragraph} title='Scripts'>
+      <Paragraph className={classes.paragraph} title='Controls'>
       </Paragraph>
     </div>
   )
