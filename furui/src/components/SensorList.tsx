@@ -35,7 +35,7 @@ function SensorList(props: { className?: any, deviceInfo: DeviceInfo }) {
   const classes = useStyles()
 
   const [sensorList, setSensorList] = useState<SensorInfo[] | null>(null)
-  const [reload, setReload] = useState(true)
+  const [reload, setReload] = useState(false)
 
   const [open, setOpen] = useState(false)
   const [selectedSensor, setSelectedSensor] = useState<SensorInfo | undefined>()
@@ -47,10 +47,7 @@ function SensorList(props: { className?: any, deviceInfo: DeviceInfo }) {
       setSensorList(list)
     }
 
-    if (reload) {
-      retrieve()
-      setReload(false)
-    }
+    retrieve()
   }, [dvinfo, reload])
 
   async function handleSubmit(info: SensorInfo | NewSensorInfo) {
@@ -60,7 +57,7 @@ function SensorList(props: { className?: any, deviceInfo: DeviceInfo }) {
       } else {
         await axios.post(`/api/front/dev/sensors/${dvinfo.id}/create`, info)
       }
-      setReload(true)
+      setReload(!reload)
     } catch (err) {
       alert(`error: ${err}`)
     } finally {
@@ -71,7 +68,7 @@ function SensorList(props: { className?: any, deviceInfo: DeviceInfo }) {
   async function handleDelete(info: SensorInfo) {
     try {
       await axios.post(`/api/front/dev/sensors/${dvinfo.id}/delete/${info.id}`)
-      setReload(true)
+      setReload(!reload)
     } catch (err) {
       alert(`error: ${err}`)
     } finally {

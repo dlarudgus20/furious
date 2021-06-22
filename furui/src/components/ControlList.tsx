@@ -47,10 +47,7 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
       setControlList(list)
     }
 
-    if (reload) {
-      retrieve()
-      setReload(false)
-    }
+    retrieve()
   }, [dvinfo, reload])
 
   async function handleSubmit(info: ControlInfo | NewControlInfo) {
@@ -60,7 +57,7 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
       } else {
         await axios.post(`/api/front/dev/controls/${dvinfo.id}/create`, info)
       }
-      setReload(true)
+      setReload(!reload)
     } catch (err) {
       alert(`error: ${err}`)
     } finally {
@@ -71,7 +68,7 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
   async function handleDelete(info: ControlInfo) {
     try {
       await axios.post(`/api/front/dev/controls/${dvinfo.id}/delete/${info.id}`)
-      setReload(true)
+      setReload(!reload)
     } catch (err) {
       alert(`error: ${err}`)
     } finally {
@@ -82,7 +79,7 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
   async function handlePress(info: ControlInfo) {
     try {
       await axios.post(`/api/front/dev/controls/${dvinfo.id}/press/${info.id}`)
-      setReload(true)
+      setReload(!reload)
     } catch (err) {
       alert(`error: ${err}`)
     } finally {

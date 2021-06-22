@@ -1,7 +1,7 @@
 import { PassThrough } from 'stream'
 import { Event } from 'furitype'
 
-const interval = 15000
+const interval = 32000
 
 type Listener = { ping: NodeJS.Timeout, stream: PassThrough, finalizer?: () => void }
 
@@ -41,6 +41,13 @@ export function addListener(topic: number, stream: PassThrough, finalizer?: () =
 
   channel.push({ ping, stream, finalizer })
   stream.write('data: open\n\n')
+
+  stream.on('close', () => {
+    const idx = channel.findIndex(x => x.stream === stream)
+    if (idx >= 0) {
+      finalize(channel, idx)
+    }
+  })
 }
 
 export function fireEvent(topic: number, data: Event) {

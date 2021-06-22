@@ -52,6 +52,9 @@ function DevicePage() {
     if (id) {
       retrieve()
     }
+
+    const timeout = setInterval(() => retrieve(), 4000)
+    return () => clearInterval(timeout)
   }, [id])
 
   function startEdit() {
