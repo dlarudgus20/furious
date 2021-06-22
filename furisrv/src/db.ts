@@ -23,7 +23,7 @@ export async function getTransaction<T>(fn: (conn: SqlDb) => Promise<T>) {
 
     const conn = new SqliteDatabase({
         filename: dbFilename,
-        driver: sqlite3.cached.Database,
+        driver: sqlite3.Database,
       })
 
     await mkdirp(dbDirectory)

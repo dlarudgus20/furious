@@ -3,8 +3,12 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import reportWebVitals from './reportWebVitals'
+import { Provider as AuthProvider } from './contexts/Auth'
 import Layout from './components/Layout'
 import AppPage from './pages/App'
+import SignInPage from './pages/SignIn'
+import DevicePage from './pages/Device'
+import NewDevicePage from './pages/NewDevice'
 import NotFoundPage from './pages/NotFound'
 import './index.css'
 
@@ -28,16 +32,21 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Layout>
-        <BrowserRouter>
-          <Switch>
-            <Route exact path='/' component={AppPage} />
-            <Route path='*' component={NotFoundPage} />
-          </Switch>
-        </BrowserRouter>
-      </Layout>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <Layout>
+              <Switch>
+                <Route exact path='/' component={AppPage} />
+                <Route path='/signin' component={SignInPage} />
+                <Route path='/device/:id' component={DevicePage} />
+                <Route path='/new-device' component={NewDevicePage} />
+                <Route path='*' component={NotFoundPage} />
+              </Switch>
+          </Layout>
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 )

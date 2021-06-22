@@ -1,7 +1,9 @@
 import React from 'react'
-import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
+import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Menu as MenuIcon } from '@material-ui/icons'
+import { useAuth } from '../contexts/Auth'
 
 const useStyles = makeStyles(theme => createStyles({
   root: {
@@ -21,6 +23,8 @@ const useStyles = makeStyles(theme => createStyles({
 
 function Layout(props: any) {
   const classes = useStyles()
+  const history = useHistory()
+  const auth = useAuth()
 
   return (
     <div className={classes.root}>
@@ -32,6 +36,9 @@ function Layout(props: any) {
           <Typography className={classes.title} variant='h6'>
             Furui
           </Typography>
+          <Button color='inherit' onClick={() => history.push('/signin')}>
+            {auth.userInfo ? auth.userInfo.name : 'Sign in'}
+          </Button>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>
