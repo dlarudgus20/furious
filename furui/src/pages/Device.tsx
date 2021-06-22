@@ -8,9 +8,11 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Edit as EditIcon, Check, Clear, ExpandMore } from '@material-ui/icons'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import axios from 'axios'
-import { DeviceInfo } from '../types/Device'
+import { DeviceInfo } from 'furitype'
 import Paragraph from '../components/Paragraph'
 import OnlineStatus from '../components/OnlineStatus'
+import SensorList from '../components/SensorList'
+import ControlList from '../components/ControlList'
 
 const useStyles = makeStyles(theme => createStyles({
   paragraph: {
@@ -184,10 +186,8 @@ function DevicePage() {
           </AccordionDetails>
         </Accordion>
       </Paragraph>
-      <Paragraph className={classes.paragraph} title='Sensors'>
-      </Paragraph>
-      <Paragraph className={classes.paragraph} title='Controls'>
-      </Paragraph>
+      <SensorList className={classes.paragraph} deviceInfo={info} />
+      <ControlList className={classes.paragraph} deviceInfo={info} />
     </div>
   )
 }

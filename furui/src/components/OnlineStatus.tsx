@@ -1,3 +1,4 @@
+import React from 'react'
 import { Checkbox, FormControlLabel } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { FavoriteBorder, Favorite } from '@material-ui/icons'
@@ -20,12 +21,26 @@ const GreenCheckbox = withStyles({
   disabled: {},
 })(Checkbox)
 
-function OnlineStatus(props: { className?: any, value: boolean, positiveLabel: string, negativeLabel: string }) {
+function OnlineStatus(props: {
+  className?: any,
+  value: boolean,
+  positiveLabel: string,
+  negativeLabel: string,
+  icon?: React.ReactNode,
+  checkedIcon?: React.ReactNode,
+}) {
   return (
     <FormControlLabel
       className={props.className}
       label={props.value ? props.positiveLabel : props.negativeLabel}
-      control={<GreenCheckbox checked={props.value} onChange={() => {}} icon={<FavoriteBorder />} checkedIcon={<Favorite />} />}
+      control={
+        <GreenCheckbox
+          checked={props.value}
+          onChange={() => {}}
+          icon={props.icon || <FavoriteBorder />}
+          checkedIcon={props.checkedIcon || <Favorite />}
+        />
+      }
     />
   )
 }

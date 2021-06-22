@@ -4,8 +4,9 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "build": "npm run build --prefix ../furui && tsc",
-    "start": "tsc && node build/index.js",
+    "build": "npm run build --prefix ../furui && npm run build-server",
+    "build-server": "tsc",
+    "start": "npm run build-server && node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "dayjs": "^1.10.5",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-logger": "^3.2.1",
@@ -37,6 +39,7 @@
     "p-queue": "^6.6.2",
     "sqlite": "^4.0.23",
     "sqlite3": "^5.0.2",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "furitype": "file:../furitype"
   }
 }

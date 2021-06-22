@@ -1,17 +1,11 @@
 import Router from 'koa-router'
 import bcrypt from 'bcrypt'
 import { getTransaction } from '../../db'
-import { logger } from '../../logger'
+import { AuthInfo } from '../../types/auth'
 
 const saltRounds = 10
 
 const router = new Router()
-
-export interface AuthInfo {
-  id: number
-  name: string
-  email: string
-}
 
 router.get('/', ctx => {
   const auth = ctx.session && ctx.session.auth

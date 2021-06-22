@@ -8,6 +8,8 @@ import send from 'koa-send'
 import koaLogger from 'koa-logger'
 import apiFrontAuth from './api/front/auth'
 import apiFrontDev from './api/front/dev'
+import apiFrontScript from './api/front/script'
+import apiDeviceAuth from './api/device/auth'
 import { logger } from './logger'
 
 const react = path.join(__dirname, '../../furui/build')
@@ -17,6 +19,16 @@ export const app = new Koa()
 const router = new Router()
 
 app.keys = ['wlBPZDPP8s']
+
+// uncaught exceptions
+app.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    logger.error(err.stack)
+    throw err
+  }
+})
 
 app.use(bodyParser())
 
@@ -31,6 +43,8 @@ app.use(router.routes())
 
 router.use('/api/front/auth', apiFrontAuth.routes())
 router.use('/api/front/dev', apiFrontDev.routes())
+router.use('/api/front/script', apiFrontScript.routes())
+router.use('/api/device/auth', apiDeviceAuth.routes())
 
 // react-router-dom will process further routing
 router.get(/^\/(?!api).*$/, async ctx => {

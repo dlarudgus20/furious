@@ -33,7 +33,7 @@ function AppPage() {
   }
 
   if (!auth.userInfo) {
-    return <Typography>loading...</Typography>
+    return <Typography>Loading...</Typography>
   }
 
   return (

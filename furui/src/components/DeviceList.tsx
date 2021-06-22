@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, IconButton, Box, CardActions, Button } f
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Add as AddIcon } from '@material-ui/icons'
 import axios from 'axios'
-import { DeviceInfo } from '../types/Device'
+import { DeviceInfo } from 'furitype'
 import Paragraph from '../components/Paragraph'
 import OnlineStatus from '../components/OnlineStatus'
 
@@ -38,6 +38,7 @@ function DeviceList() {
   useEffect(() => {
     async function retrieve() {
       const list = (await axios.get('/api/front/dev/list')).data as DeviceInfo[]
+      list.sort((a, b) => a.id - b.id)
       setDeviceList(list)
     }
     retrieve()
@@ -49,12 +50,12 @@ function DeviceList() {
         {deviceList ? (
           <>
             {deviceList.map(info => {
-              const key = `device-grid-tile-${info.id}`
+              const key = `device-list-${info.id}`
 
               return (
                 <DeviceCard
                   key={key}
-                  deviceInfo={info}
+                  info={info}
                   onClick={() => history.push(`/device/${info.id}`)}
                 />
               )
@@ -72,7 +73,7 @@ function DeviceList() {
           </>
         ) : (
           <Box display='flex' alignItems='center'>
-            <Typography variant='h4'>loading...</Typography>
+            <Typography variant='h4'>Loading...</Typography>
           </Box>
         )}
       </div>
@@ -80,17 +81,17 @@ function DeviceList() {
   )
 }
 
-function DeviceCard(props: { deviceInfo: DeviceInfo, onClick?: () => void }) {
+function DeviceCard(props: { info: DeviceInfo, onClick?: () => void }) {
   const classes = useStyles()
 
   return (
     <Card className={classes.card} variant='outlined'>
       <CardContent>
         <Typography variant='h6' gutterBottom>
-          {props.deviceInfo.name}
+          {props.info.name}
         </Typography>
         <OnlineStatus
-          value={props.deviceInfo.isOnline}
+          value={props.info.isOnline}
           positiveLabel='online'
           negativeLabel='offline'
         />

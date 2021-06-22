@@ -19,6 +19,9 @@ const useStyles = makeStyles(theme => createStyles({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  lowerButton: {
+    textTransform: 'none',
+  },
 }))
 
 function Layout(props: any) {
@@ -33,10 +36,14 @@ function Layout(props: any) {
           <IconButton className={classes.menuButton} edge='start' color='inherit' aria-label='menu'>
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant='h6'>
-            Furui
-          </Typography>
-          <Button color='inherit' onClick={() => history.push('/signin')}>
+          <div className={classes.title}>
+            <Button className={classes.lowerButton} color='inherit' onClick={() => history.push('/')}>
+              <Typography variant='h6'>
+                Furui
+              </Typography>
+            </Button>
+          </div>
+          <Button className={classes.lowerButton} color='inherit' onClick={() => history.push('/signin')}>
             {auth.userInfo ? auth.userInfo.name : 'Sign in'}
           </Button>
         </Toolbar>

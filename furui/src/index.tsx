@@ -36,13 +36,13 @@ ReactDOM.render(
       <ThemeProvider theme={theme}>
         <AuthProvider>
           <Layout>
-              <Switch>
-                <Route exact path='/' component={AppPage} />
-                <Route path='/signin' component={SignInPage} />
-                <Route path='/device/:id' component={DevicePage} />
-                <Route path='/new-device' component={NewDevicePage} />
-                <Route path='*' component={NotFoundPage} />
-              </Switch>
+            <Switch>
+              <Route exact path='/' component={AppPage} />
+              <Route path='/signin' component={SignInPage} />
+              <Route path='/device/:id' component={DevicePage} />
+              <Route path='/new-device' component={NewDevicePage} />
+              <Route path='*' component={NotFoundPage} />
+            </Switch>
           </Layout>
         </AuthProvider>
       </ThemeProvider>
