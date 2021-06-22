@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Edit as EditIcon, Check, Clear, ExpandMore } from '@material-ui/icons'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import axios from 'axios'
 import { DeviceInfo } from '../types/Device'
 import Paragraph from '../components/Paragraph'
@@ -108,7 +109,7 @@ function DevicePage() {
 
   return (
     <div>
-      <Paragraph className={classes.paragraph} title='Device Info'>
+      <Paragraph className={classes.paragraph} title={`Device Info: ${info.name}`}>
         <Box className={classes.item} display='flex' alignItems='center' flexDirection='row'>
           <Typography style={{ marginRight: 8 }}>Name: </Typography>
           <TextField
@@ -146,7 +147,7 @@ function DevicePage() {
             <Typography>View Device Secret</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {openSecret ? (
+            {(openSecret && secret) ? (
               <Grid container justify='space-between'>
                 <Grid item>
                   <TextField
@@ -159,16 +160,22 @@ function DevicePage() {
                   />
                 </Grid>
                 <Grid item style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'flex-end' }}>
-                  <Button
-                    variant='contained'
-                    color='secondary'
-                    onClick={() => {
-                      setOpenSecret(false)
-                      setSecret(null)
-                    }}
-                  >
-                    Clear
-                  </Button>
+                  <Box display='flex' flexDirection='row' alignItems='center'>
+                    <CopyToClipboard text={secret} onCopy={() => alert('Secret Copied')}>
+                      <Button variant='contained' color='primary'>Copy to Clipboard</Button>
+                    </CopyToClipboard>
+                    <Button
+                      style={{ marginLeft: '0.5rem' }}
+                      variant='contained'
+                      color='secondary'
+                      onClick={() => {
+                        setOpenSecret(false)
+                        setSecret(null)
+                      }}
+                    >
+                      Clear
+                    </Button>
+                  </Box>
                 </Grid>
               </Grid>
             ) : (

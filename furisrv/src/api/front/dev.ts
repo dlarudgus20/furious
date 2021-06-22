@@ -59,10 +59,10 @@ router.get('/list', async ctx => {
     const rows = await conn.all('SELECT Id, OwnerId, Name, IsOnline FROM Devices WHERE OwnerId = ?;', auth.id)
 
     const list: DeviceInfo[] = rows.map(row => ({
-      id: rows[0].Id,
-      ownerId: rows[0].OwnerId,
-      name: rows[0].Name,
-      isOnline: !!rows[0].isOnline,
+      id: row.Id,
+      ownerId: row.OwnerId,
+      name: row.Name,
+      isOnline: !!row.isOnline,
     }))
     ctx.body = list
   })
