@@ -4,7 +4,9 @@
   "description": "",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "files": ["build/**/*"],
+  "files": [
+    "build/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,8 +14,19 @@
   "author": "",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@types/eventsource": "^1.1.5",
+    "@types/tough-cookie": "^4.0.0",
     "tslint": "^6.1.3",
     "typescript": "^4.3.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@types/node": "^15.12.4",
+    "axios": "^0.21.1",
+    "axios-cookiejar-support": "^1.0.1",
+    "eventsource": "^1.1.0",
+    "furitype": "file:../furitype",
+    "p-queue": "^6.6.2",
+    "tough-cookie": "^4.0.0",
+    "winston": "^3.3.3"
+  }
 }

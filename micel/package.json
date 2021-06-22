@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "start": "tsc --project ../furidev && tsc && node build/index.js",
+    "start": "tsc && node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,6 +14,7 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
+    "@types/node": "^15.12.4",
     "furidev": "file:../furidev"
   }
 }

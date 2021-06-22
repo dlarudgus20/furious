@@ -1,4 +1,3 @@
-
 export interface SensorInfo {
   id: number
   deviceId: number

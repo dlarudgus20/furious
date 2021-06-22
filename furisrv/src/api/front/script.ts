@@ -4,30 +4,6 @@ import { AuthInfo } from '../../types/auth'
 import { getTransaction } from '../../db'
 import { logger } from '../../logger'
 
-export interface DeviceDescript {
-  info: DeviceInfo
-  sensors: any[]
-  controls: any[]
-}
-
-export interface ScriptDescript {
-  id: number
-  ownerId: number
-  name: string
-  isEnabled: boolean
-  script: string
-  devices: DeviceDescript[]
-}
-
-export interface ScriptInfo {
-  id: number
-  ownerId: number
-  name: string
-  isEnabled: boolean
-  script: string
-  devices: number[]
-}
-
 const router = new Router()
 
 router.get('/list', async ctx => {

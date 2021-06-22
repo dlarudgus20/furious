@@ -9,6 +9,15 @@
 			],
 			"group": "build",
 			"label": "tsc: build - furisrv/tsconfig.json"
+		},
+		{
+			"type": "typescript",
+			"tsconfig": "micel/tsconfig.json",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build",
+			"label": "tsc: build - micel/tsconfig.json"
 		}
 	]
 }

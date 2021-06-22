@@ -1,4 +1,3 @@
-
 export interface ControlInfo {
   id: number
   deviceId: number

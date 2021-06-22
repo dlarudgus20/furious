@@ -9,7 +9,7 @@ import koaLogger from 'koa-logger'
 import apiFrontAuth from './api/front/auth'
 import apiFrontDev from './api/front/dev'
 import apiFrontScript from './api/front/script'
-import apiDeviceAuth from './api/device/auth'
+import apiDevice from './api/device'
 import { logger } from './logger'
 
 const react = path.join(__dirname, '../../furui/build')
@@ -44,7 +44,7 @@ app.use(router.routes())
 router.use('/api/front/auth', apiFrontAuth.routes())
 router.use('/api/front/dev', apiFrontDev.routes())
 router.use('/api/front/script', apiFrontScript.routes())
-router.use('/api/device/auth', apiDeviceAuth.routes())
+router.use('/api/device', apiDevice.routes())
 
 // react-router-dom will process further routing
 router.get(/^\/(?!api).*$/, async ctx => {

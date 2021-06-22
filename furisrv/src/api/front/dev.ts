@@ -1,17 +1,54 @@
 import crypto from 'crypto'
 import { promisify } from 'util'
+import { PassThrough } from 'stream'
 import Router from 'koa-router'
-import dayjs from 'dayjs'
 import {
   DeviceInfo, SensorInfo, NewSensorInfo, ControlInfo, NewControlInfo,
   isNewSensorInfo, isNewControlInfo
 } from 'furitype'
 import { getTransaction } from '../../db'
 import { AuthInfo } from '../../types/auth'
+import { addListener, fireEvent } from '../../event'
 
 const randomBytes = promisify(crypto.randomBytes)
 
 const router = new Router()
+
+router.get('/event/:id', async ctx => {
+  if (ctx.accepts('text/event-stream')) {
+    const auth: AuthInfo | undefined = ctx.session?.auth
+    const id = parseInt(ctx.params.id)
+
+    if (!auth) {
+      ctx.throw(401)
+      return
+    }
+    if (!id) {
+      ctx.throw(400)
+      return
+    }
+
+    await getTransaction(async conn => {
+      const rows = await conn.all('SELECT Id FROM Devices WHERE Id = ? AND OwnerId = ?;', id, auth.id)
+
+      if (rows.length === 0) {
+        ctx.throw(401)
+      }
+    })
+
+    const stream = new PassThrough()
+
+    ctx.type = 'text/event-stream'
+    ctx.set('Cache-Control', 'no-cache')
+    ctx.set('Connection', 'Keep-Alive')
+    ctx.body = stream
+
+    addListener(id, stream)
+
+  } else {
+    ctx.status = 415 // Unsupported Media
+  }
+})
 
 router.get('/info/:id', async ctx => {
   const auth: AuthInfo | undefined = ctx.session?.auth
@@ -182,8 +219,9 @@ router.get('/sensors/:dvid/list', async ctx => {
       deviceId: row.DeviceId,
       name: row.Name,
       value: row.Value,
-      lastUpdated: dayjs(row.LastUpdated).unix(),
+      lastUpdated: row.LastUpdated,
     }))
+
     ctx.body = list
   })
 })
@@ -219,8 +257,9 @@ router.get('/sensors/:dvid/info/:sid', async ctx => {
       deviceId: rows[0].DeviceId,
       name: rows[0].Name,
       value: rows[0].Value,
-      lastUpdated: dayjs(rows[0].LastUpdated).unix(),
+      lastUpdated: rows[0].LastUpdated,
     }
+
     ctx.body = info
   })
 })
@@ -256,6 +295,9 @@ router.post('/sensors/:dvid/create', async ctx => {
       id: result.lastID,
       lastUpdated: null,
     }
+
+    fireEvent(dvid, { type: 'sensor', subtype: 'create', info: created })
+
     ctx.body = created
   })
 })
@@ -285,6 +327,8 @@ router.post('/sensors/:dvid/delete/:sid', async ctx => {
     if (result.changes === 0) {
       ctx.throw(404)
     }
+
+    fireEvent(dvid, { type: 'sensor', subtype: 'delete', sid })
 
     ctx.body = ''
   })
@@ -318,6 +362,8 @@ router.post('/sensors/:dvid/changeName/:sid', async ctx => {
       ctx.throw(400)
     }
 
+    fireEvent(dvid, { type: 'sensor', subtype: 'rename', sid, name })
+
     ctx.body = ''
   })
 })
@@ -349,6 +395,7 @@ router.get('/controls/:dvid/list', async ctx => {
       name: row.Name,
       pressed: !!row.Pressed,
     }))
+
     ctx.body = list
   })
 })
@@ -385,6 +432,7 @@ router.get('/controls/:dvid/info/:cid', async ctx => {
       name: rows[0].Name,
       pressed: !!rows[0].Pressed,
     }
+
     ctx.body = info
   })
 })
@@ -420,6 +468,9 @@ router.post('/controls/:dvid/create', async ctx => {
       id: result.lastID,
       pressed: false,
     }
+
+    fireEvent(dvid, { type: 'control', subtype: 'create', info: created })
+
     ctx.body = created
   })
 })
@@ -449,6 +500,8 @@ router.post('/controls/:dvid/delete/:cid', async ctx => {
     if (result.changes === 0) {
       ctx.throw(404)
     }
+
+    fireEvent(dvid, { type: 'control', subtype: 'delete', cid })
 
     ctx.body = ''
   })
@@ -481,6 +534,8 @@ router.post('/controls/:dvid/changeName/:cid', async ctx => {
     if (result.changes === 0) {
       ctx.throw(400)
     }
+
+    fireEvent(dvid, { type: 'control', subtype: 'rename', cid, name })
 
     ctx.body = ''
   })
@@ -520,8 +575,7 @@ router.post('/controls/:dvid/press/:cid', async ctx => {
         ctx.throw(404)
       }
 
-      // TODO: notify devices
-      // TODO: networking outside transaction
+      fireEvent(dvid, { type: 'control', subtype: 'press', cid, press: true })
 
       ctx.body = ''
     } else {

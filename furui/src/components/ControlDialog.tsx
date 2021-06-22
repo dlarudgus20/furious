@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import {
   Dialog, DialogActions, DialogContent, DialogTitle,
   Table, TableHead, TableBody, TableRow, TableCell,
-  Button, Typography, TextField, FormControlLabel, Checkbox
+  Button, Typography, TextField
 } from '@material-ui/core'
 import { DeviceInfo, ControlInfo, NewControlInfo } from 'furitype'
 import OnlineStatus from './OnlineStatus'

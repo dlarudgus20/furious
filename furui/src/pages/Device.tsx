@@ -113,6 +113,14 @@ function DevicePage() {
     <div>
       <Paragraph className={classes.paragraph} title={`Device Info: ${info.name}`}>
         <Box className={classes.item} display='flex' alignItems='center' flexDirection='row'>
+          <Typography style={{ marginRight: 8 }}>Device ID: </Typography>
+          <TextField
+            value={info.id}
+            type='text'
+            disabled
+          />
+        </Box>
+        <Box className={classes.item} display='flex' alignItems='center' flexDirection='row'>
           <Typography style={{ marginRight: 8 }}>Name: </Typography>
           <TextField
             value={newName}
