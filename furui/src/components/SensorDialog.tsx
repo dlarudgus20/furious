@@ -5,6 +5,7 @@ import {
   Button, Typography, TextField
 } from '@material-ui/core'
 import dayjs from 'dayjs'
+import { saveAs } from 'file-saver'
 import { DeviceInfo, SensorInfo, NewSensorInfo } from 'furitype'
 
 function SensorDialog(props: {
@@ -41,6 +42,13 @@ function SensorDialog(props: {
       alert('Name is empty')
     } else {
       props.onSubmit(newInfo)
+    }
+  }
+
+  function handleDownloadValue() {
+    if (newInfo) {
+      const blob = new Blob([newInfo.value], { type: 'text/plain;charset=utf-8' })
+      saveAs(blob, newInfo.name)
     }
   }
 
@@ -99,13 +107,22 @@ function SensorDialog(props: {
               <TableCell>
                 <TextField
                   label='Sensor Value'
-                  value={newInfo.value}
+                  value={newInfo.value.substr(0, 200)}
                   type='text'
                   multiline
                   disabled
                 />
               </TableCell>
             </TableRow>
+            {newInfo.value.length > 200 && (
+              <TableRow>
+                <TableCell colSpan={2}>
+                  <Button variant='contained' color='primary' onClick={handleDownloadValue}>
+                    Download Full Sensor Value
+                  </Button>
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </DialogContent>

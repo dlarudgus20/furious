@@ -26,12 +26,11 @@ device.connect(async () => {
   while (true) {
     await delay(5000)
 
-    console.log('캡처 시작')
     const { stdout } = spawn('raspistill', ['-w', '640', '-h', '480', '-q', '5', '-o', '-'])
     const buffer = await streamToBuffer(stdout)
 
-    console.log('캡처 완료')
-    await device.sendSensor('카메라', buffer.toString('base64'))
+    const data = ['data:image/jpg;base64,', buffer.toString('base64')].join('')
+    await device.sendSensor('카메라', data)
   }
 })
 

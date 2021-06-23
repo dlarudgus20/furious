@@ -142,7 +142,7 @@ function SensorCard(props: { info: SensorInfo, onClick?: () => void }) {
           {props.info.name}
         </Typography>
         <TextField
-          value={props.info.value}
+          value={props.info.value.substr(0, 200)}
           type='text'
           disabled
         />
