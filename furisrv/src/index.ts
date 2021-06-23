@@ -2,7 +2,7 @@ import { app } from './app'
 import { initializeDatabase } from './db'
 import { logger } from './logger'
 
-const port = 8080
+const port = process.env.PORT || 8080
 
 async function main() {
   await initializeDatabase()
