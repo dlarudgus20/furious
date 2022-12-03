@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@types/node": "^15.12.4",
-    "axios": "^0.21.1",
-    "axios-cookiejar-support": "^1.0.1",
+    "axios": "^1.2.0",
+    "axios-cookiejar-support": "^4.0.3",
     "eventsource": "^1.1.0",
     "furitype": "file:../furitype",
     "p-queue": "^6.6.2",

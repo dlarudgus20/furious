@@ -1,6 +1,6 @@
 import EventSource from 'eventsource'
 import axios from 'axios'
-import axiosCookieJarSupport from 'axios-cookiejar-support'
+import { wrapper as cookieWrapper } from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import PQueue from 'p-queue'
 import { DeviceDescript, BootEvent, Event, ControlInfo } from 'furitype'
@@ -12,8 +12,6 @@ type Listener = () => (Promise<unknown> | unknown);
 
 const baseURL = process.env.FURI_SERVER || 'http://localhost:8080'
 const retryInterval = 20000
-
-axiosCookieJarSupport(axios)
 
 export const delay = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms))
 
@@ -32,11 +30,11 @@ function tryParseJSON(str: string) {
 export class Device {
   private cookieJar = new CookieJar()
 
-  private config = {
+  private server = cookieWrapper(axios.create({
     baseURL,
     jar: this.cookieJar,
     withCredentials: true,
-  }
+  }))
 
   private sse: EventSource | null = null
 
@@ -53,7 +51,7 @@ export class Device {
   constructor(private id: number, private secret: string) {}
 
   private async auth() {
-    await axios.post('/api/device/auth', { id: this.id, pw: this.secret }, this.config)
+    await this.server.post('/api/device/auth', { id: this.id, pw: this.secret })
   }
 
   private openSSE(cookie: string) {
@@ -125,7 +123,7 @@ export class Device {
       }
 
       try {
-        await axios.post(`/api/device/sensor/${info.id}`, { value: str }, this.config)
+        await this.server.post(`/api/device/sensor/${info.id}`, { value: str })
         return true
       } catch (err) {
         logger.error(`sendSensor() error: ${err.stack}`)
@@ -171,7 +169,7 @@ export class Device {
 
     this.queue.add(async () => {
       try {
-        await axios.post(`/api/device/control/${info.id}/unpress`, {}, this.config)
+        await this.server.post(`/api/device/control/${info.id}/unpress`, {})
       } catch (err) {
         logger.error(`control unpress error: ${err.stack}`)
       }
