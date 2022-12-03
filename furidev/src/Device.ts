@@ -10,7 +10,7 @@ type Timeout = ReturnType<typeof setTimeout>
 
 type Listener = () => (Promise<unknown> | unknown);
 
-const baseURL = 'http://192.168.0.3:8080'
+const baseURL = process.env.FURI_SERVER || 'http://localhost:8080'
 const retryInterval = 20000
 
 axiosCookieJarSupport(axios)
