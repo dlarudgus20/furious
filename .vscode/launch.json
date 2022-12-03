@@ -25,6 +25,13 @@
                 "${workspaceFolder}/micel/build/**/*.js"
             ],
             "console": "integratedTerminal"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "furui: Launch (chrome)",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/furui/src"
         }
     ]
 }
