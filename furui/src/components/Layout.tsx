@@ -1,9 +1,11 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core'
+import { AppBar, Toolbar, IconButton, Typography, Button, MenuItem, Select, FormControl } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Menu as MenuIcon } from '@material-ui/icons'
 import { useAuth } from '../contexts/Auth'
+import { useTheme } from '../contexts/Theme'
+import MyLocales, { SupportedLocales } from '../locales'
 
 const useStyles = makeStyles(theme => createStyles({
   root: {
@@ -22,12 +24,19 @@ const useStyles = makeStyles(theme => createStyles({
   lowerButton: {
     textTransform: 'none',
   },
+  localeSelect: {
+    color: 'white',
+  },
+  localeSelectIcon: {
+    fill: 'white',
+  },
 }))
 
 function Layout(props: any) {
   const classes = useStyles()
   const history = useHistory()
   const auth = useAuth()
+  const theme = useTheme()
 
   return (
     <div className={classes.root}>
@@ -43,6 +52,30 @@ function Layout(props: any) {
               </Typography>
             </Button>
           </div>
+          <FormControl className={classes.menuButton}>
+            <Select
+              inputProps={{
+                classes: {
+                  root: classes.localeSelect,
+                  icon: classes.localeSelectIcon,
+                },
+              }}
+              value={theme.locale}
+              disableUnderline
+              onChange={e => {
+                theme.setLocale(e.target.value as SupportedLocales)
+              }}
+            >
+              {Object.keys(MyLocales).map(locale => (
+                <MenuItem
+                  id={`locale-select-${locale}`}
+                  value={locale}
+                >
+                  {locale}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <Button className={classes.lowerButton} color='inherit' onClick={() => history.push('/signin')}>
             {auth.userInfo ? auth.userInfo.name : 'Sign in'}
           </Button>

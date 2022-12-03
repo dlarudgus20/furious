@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import reportWebVitals from './reportWebVitals'
+import { Provider as ThemeProvider } from './contexts/Theme'
 import { Provider as AuthProvider } from './contexts/Auth'
 import Layout from './components/Layout'
 import AppPage from './pages/App'
@@ -12,28 +12,10 @@ import NewDevicePage from './pages/NewDevice'
 import NotFoundPage from './pages/NotFound'
 import './index.css'
 
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      'Segoe UI',
-      'Roboto',
-      'Oxygen',
-      'Ubuntu',
-      'Cantarell',
-      'Fira Sans',
-      'Droid Sans',
-      'Helvetica Neue',
-      'sans-serif'
-    ].join(',')
-  },
-})
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider>
         <AuthProvider>
           <Layout>
             <Switch>
