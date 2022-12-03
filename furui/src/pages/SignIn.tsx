@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, Checkbox, Divider, FormControlLabel, Grid, Paper, TextField, Typography } from '@material-ui/core'
+import { Button, Divider, Grid, Paper, TextField, Typography } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { useAuth } from '../contexts/Auth'
 
@@ -11,6 +11,9 @@ const useStyles = makeStyles(theme => createStyles({
   },
   formItem: {
     marginBottom: theme.spacing(0.5),
+  },
+  formButtons: {
+    paddingTop: theme.spacing(3),
   }
 }))
 
@@ -112,23 +115,29 @@ function SignInPage() {
               fullWidth
             />
           )}
-          <FormControlLabel
-            className={classes.formItem}
-            checked={signUp}
-            label='Sign Up'
-            onChange={e => setSignUp(!signUp)}
-            control={<Checkbox />}
-          />
-          <Button
-            color='primary'
-            variant='contained'
-            fullWidth
-            onClick={() => signUp ? handleSignUp() : handleSignIn()}
+          <Grid
+            className={classes.formButtons}
+            container
+            direction='row'
+            justify='space-between'
           >
-            {signUp ? 'Sign Up' : 'Sign In'}
-          </Button>
+            <Button
+              color='secondary'
+              variant='outlined'
+              onClick={() => setSignUp(!signUp)}
+            >
+              Go To {signUp ? 'Sign In' : 'Sign Up'}
+            </Button>
+            <Button
+              color='primary'
+              variant='contained'
+              onClick={() => signUp ? handleSignUp() : handleSignIn()}
+            >
+              {signUp ? 'Sign Up' : 'Sign In'}
+            </Button>
+          </Grid>
         </Paper>
-        {auth.userInfo && (
+        {!signUp && auth.userInfo && (
           <Paper className={classes.form}>
             <Typography variant='h6' gutterBottom>
               Change User Name
@@ -142,14 +151,20 @@ function SignInPage() {
               onChange={e => setNewName(e.target.value)}
               fullWidth
             />
-            <Button
-              color='primary'
-              variant='contained'
-              fullWidth
-              onClick={() => handleChangeName()}
+            <Grid
+              className={classes.formButtons}
+              container
+              direction='row-reverse'
+              justify='space-between'
             >
-              Change Name
-            </Button>
+              <Button
+                color='primary'
+                variant='contained'
+                onClick={() => handleChangeName()}
+              >
+                Change Name
+              </Button>
+            </Grid>
           </Paper>
         )}
       </Grid>
