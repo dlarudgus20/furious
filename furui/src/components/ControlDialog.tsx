@@ -30,7 +30,7 @@ function ControlDialog(props: {
       }
       setNewInfo(info)
     }
-  }, [props.deviceInfo, info])
+  }, [props.deviceInfo.id, info])
 
   if (!newInfo) {
     return <></>
