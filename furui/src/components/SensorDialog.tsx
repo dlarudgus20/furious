@@ -107,7 +107,7 @@ function SensorDialog(props: {
               <TableCell>
                 <TextField
                   label='Sensor Value'
-                  value={newInfo.value.substr(0, 200)}
+                  value={newInfo.value.substring(0, 200)}
                   type='text'
                   multiline
                   disabled
