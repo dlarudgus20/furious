@@ -104,6 +104,12 @@ export class Device {
     this.descript = await this.openSSE(cookie)
     logger.info('connection established')
 
+    for (const info of this.descript.controls) {
+      if (info.pressed) {
+        this.onControlPress(info)
+      }
+    }
+
     if (callback) {
       await Promise.resolve(callback())
     }

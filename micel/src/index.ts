@@ -6,18 +6,19 @@ const secret = 'DfqUBW2oFphhoL+pfoCultVbsiLzXoMo8nj3atIg/XnK1GJ6BsngfzWkhjIAjR+D
 
 const device = new Device(id, secret)
 
-device.connect(async () => {
-  device.listenControl('왼쪽팔', async () => {
-    console.log('/==O')
-    await delay(2000)
-    console.log('\\==O')
-  })
-  device.listenControl('오른팔', async () => {
-    console.log('   O==\\')
-    await delay(2000)
-    console.log('   O==/')
-  })
+device.listenControl('왼쪽팔', async () => {
+  console.log('/==O')
+  await delay(2000)
+  console.log('\\==O')
+})
 
+device.listenControl('오른팔', async () => {
+  console.log('   O==\\')
+  await delay(2000)
+  console.log('   O==/')
+})
+
+device.connect(async () => {
   while (true) {
     await delay(750)
     device.sendSensor('1번 센서', crypto.randomInt(10))

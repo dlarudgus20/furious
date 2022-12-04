@@ -32,6 +32,13 @@
             "name": "furui: Launch (chrome)",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}/furui/src"
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "wol-sender: Launch",
+            "program": "${workspaceFolder}/wol-sender/index.js",
+            "console": "integratedTerminal"
+        },
     ]
 }

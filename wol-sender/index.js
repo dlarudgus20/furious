@@ -12,11 +12,11 @@ const ip = process.env.TARGET_IP
 
 const device = new Device(id, secret)
 
-device.connect(async () => {
-  device.listenControl('컴퓨터 켜기', () => {
-    turnOn()
-  })
+device.listenControl('컴퓨터 켜기', () => {
+  turnOn()
+})
 
+device.connect(async () => {
   while (true) {
     await delay(5000)
 

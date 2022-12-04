@@ -13,16 +13,16 @@ const device = new Device(id, secret)
 
 led.writeSync(1)
 
-device.connect(async () => {
-  device.listenControl('LED 켜기', () => {
-    console.log('LED가 켜집니다')
-    led.writeSync(1)
-  })
-  device.listenControl('LED 끄기', () => {
-    console.log('LED가 꺼집니다')
-    led.writeSync(0)
-  })
+device.listenControl('LED 켜기', () => {
+  console.log('LED가 켜집니다')
+  led.writeSync(1)
+})
+device.listenControl('LED 끄기', () => {
+  console.log('LED가 꺼집니다')
+  led.writeSync(0)
+})
 
+device.connect(async () => {
   while (true) {
     await delay(5000)
 
