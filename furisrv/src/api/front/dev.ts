@@ -384,7 +384,7 @@ router.get('/controls/:dvid/list', async ctx => {
 
   await getTransaction(async conn => {
     const rows = await conn.all(
-      'SELECT Controls.Id as Id, DeviceId, Controls.Name as Name, Pressed'
+      'SELECT Controls.Id as Id, DeviceId, Controls.Name as Name, Pressed, LastUnpress'
         + ' FROM Controls JOIN Devices ON Controls.DeviceId = Devices.Id'
         + ' WHERE Devices.OwnerId = ? AND Devices.Id = ?;',
       auth.id, dvid)
@@ -394,6 +394,7 @@ router.get('/controls/:dvid/list', async ctx => {
       deviceId: row.DeviceId,
       name: row.Name,
       pressed: !!row.Pressed,
+      lastUnpress: row.LastUnpress
     }))
 
     ctx.body = list
@@ -417,7 +418,7 @@ router.get('/controls/:dvid/info/:cid', async ctx => {
 
   await getTransaction(async conn => {
     const rows = await conn.all(
-      'SELECT Controls.Id as Id, DeviceId, Controls.Name as Name, Pressed'
+      'SELECT Controls.Id as Id, DeviceId, Controls.Name as Name, Pressed, LastUnpress'
         + ' FROM Controls JOIN Devices ON Controls.DeviceId = Devices.Id'
         + ' WHERE Devices.OwnerId = ? AND Devices.Id = ? AND Controls.Id = ?;',
       auth.id, dvid, cid)
@@ -431,6 +432,7 @@ router.get('/controls/:dvid/info/:cid', async ctx => {
       deviceId: rows[0].DeviceId,
       name: rows[0].Name,
       pressed: !!rows[0].Pressed,
+      lastUnpress: rows[0].LastUnpress,
     }
 
     ctx.body = info
@@ -467,6 +469,7 @@ router.post('/controls/:dvid/create', async ctx => {
       ...info,
       id: result.lastID,
       pressed: false,
+      lastUnpress: null,
     }
 
     fireEvent(dvid, { type: 'control', subtype: 'create', info: created })

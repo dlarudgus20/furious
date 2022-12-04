@@ -4,6 +4,8 @@ import {
   Table, TableHead, TableBody, TableRow, TableCell,
   Button, Typography, TextField
 } from '@mui/material'
+import { Check } from '@mui/icons-material'
+import dayjs from 'dayjs'
 import { DeviceInfo, ControlInfo, NewControlInfo } from 'furitype'
 import OnlineStatus from './OnlineStatus'
 
@@ -86,7 +88,26 @@ function ControlDialog(props: {
                   <OnlineStatus
                     value={info.pressed}
                     positiveLabel='Device is processing this command'
-                    negativeLabel='Device is not processing this command'
+                    negativeLabel={
+                      info.lastUnpress
+                      ? 'Device completed this command'
+                      : 'Device is not processing this command'
+                    }
+                    icon={
+                      info.lastUnpress ? <Check /> : undefined
+                    }
+                  />
+                </TableCell>
+              </TableRow>
+            )}
+            {info?.lastUnpress && (
+              <TableRow>
+                <TableCell>LastUnpress</TableCell>
+                <TableCell>
+                  <TextField
+                    value={dayjs.unix(info.lastUnpress).format('YYYY-MM-DDTHH:mm:ss.SSS')}
+                    type='datetime-local'
+                    disabled
                   />
                 </TableCell>
               </TableRow>

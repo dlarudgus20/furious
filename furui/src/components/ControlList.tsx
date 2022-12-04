@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Card, CardContent, Typography, IconButton, Box, CardActions, Button } from '@mui/material'
+import { Card, CardContent, Typography, IconButton, Box, CardActions, Button, TextField } from '@mui/material'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
-import { Add as AddIcon } from '@mui/icons-material'
+import { Add as AddIcon, Check } from '@mui/icons-material'
 import axios from 'axios'
 import { DeviceInfo, ControlInfo, NewControlInfo, isControlInfo } from 'furitype'
 import Paragraph from '../components/Paragraph'
@@ -156,8 +156,15 @@ function ControlCard(props: { info: ControlInfo, onClick?: () => void }) {
         </Typography>
         <OnlineStatus
           value={props.info.pressed}
-          positiveLabel='Cmd Pressed'
-          negativeLabel='Not Pressed'
+          positiveLabel='Pressed'
+          negativeLabel={
+            props.info.lastUnpress
+            ? 'Completed'
+            : 'Not Pressed'
+          }
+          icon={
+            props.info.lastUnpress ? <Check /> : undefined
+          }
         />
       </CardContent>
       <CardActions>

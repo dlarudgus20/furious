@@ -84,13 +84,14 @@ router.get('/start', async ctx => {
         lastUpdated: row.LastUpdated,
       }))
 
-      rows = await conn.all('SELECT Id, Name, Pressed FROM Controls WHERE DeviceId = ?', id)
+      rows = await conn.all('SELECT Id, Name, Pressed, LastUnpress FROM Controls WHERE DeviceId = ?', id)
 
       const controls: ControlInfo[] = rows.map(row => ({
         id: row.Id,
         deviceId: id,
         name: row.Name,
         pressed: !!row.Pressed,
+        lastUnpress: row.LastUnpress,
       }))
 
       const descript: DeviceDescript = {
@@ -180,9 +181,10 @@ router.post('/control/:id/unpress', async ctx => {
   }
 
   await getTransaction(async conn => {
+    const current = dayjs().unix()
     const result = await conn.run(
-      'UPDATE Controls SET Pressed = 0 WHERE Id = ? AND DeviceId = ?',
-      id, deviceInfo.id)
+      'UPDATE Controls SET Pressed = 0, LastUnpress = ? WHERE Id = ? AND DeviceId = ?',
+      current, id, deviceInfo.id)
 
     if (result.changes === 0) {
       ctx.throw(404)

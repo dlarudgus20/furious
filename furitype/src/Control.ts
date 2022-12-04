@@ -3,6 +3,7 @@ export interface ControlInfo {
   deviceId: number
   name: string
   pressed: boolean
+  lastUnpress: number | null
 }
 
 export interface NewControlInfo {

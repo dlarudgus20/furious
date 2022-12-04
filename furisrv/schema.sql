@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS Controls (
   DeviceId INTEGER NOT NULL,
   Name TEXT NOT NULL,
   Pressed INTEGER NOT NULL DEFAULT 0,
+  LastUnpress INTEGER NULL,
   UNIQUE ( DeviceId, Name ),
   FOREIGN KEY ( DeviceId )
     REFERENCES Devices ( Id )
