@@ -6,6 +6,7 @@ import session from 'koa-session'
 import serve from 'koa-static'
 import send from 'koa-send'
 import koaLogger from 'koa-logger'
+import { MemoryStore } from './MemoryStore'
 import apiFrontAuth from './api/front/auth'
 import apiFrontDev from './api/front/dev'
 import apiFrontScript from './api/front/script'
@@ -36,7 +37,9 @@ app.use(koaLogger((str, args) => {
   logger.debug(str)
 }))
 
-app.use(session({ }, app))
+app.use(session({
+  store: new MemoryStore(),
+}, app))
 
 app.use(serve(react))
 app.use(router.routes())
