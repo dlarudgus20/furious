@@ -33,21 +33,21 @@ function setOffline(id: number) {
 }
 
 router.post('/auth', async ctx => {
-  const { id, pw } = ctx.request.body as { id: number, pw: string }
+  const req = ctx.request.body as { id: string, pw: string }
 
   await getTransaction(async conn => {
-    let rows = await conn.all('SELECT Password, OwnerId, Name, IsOnline FROM Devices WHERE Id = ?;', id)
+    let rows = await conn.all('SELECT Password, OwnerId, Name, IsOnline FROM Devices WHERE Id = ?;', req.id)
 
     if (rows.length === 0) {
       ctx.throw(401)
     }
 
-    if (rows[0].Password !== pw) {
+    if (rows[0].Password !== req.pw) {
       ctx.throw(401)
     }
 
     const info: DeviceInfo = {
-      id,
+      id: parseInt(req.id),
       ownerId: rows[0].OwnerId,
       name: rows[0].Name,
       isOnline: !!rows[0].IsOnline,
