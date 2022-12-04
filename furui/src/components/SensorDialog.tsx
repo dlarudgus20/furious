@@ -3,7 +3,7 @@ import {
   Dialog, DialogActions, DialogContent, DialogTitle,
   Table, TableHead, TableBody, TableRow, TableCell,
   Button, Typography, TextField
-} from '@material-ui/core'
+} from '@mui/material'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
 import { DeviceInfo, SensorInfo, NewSensorInfo } from 'furitype'

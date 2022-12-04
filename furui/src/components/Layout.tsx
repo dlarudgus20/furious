@@ -1,8 +1,9 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { AppBar, Toolbar, IconButton, Typography, Button, MenuItem, Select, FormControl } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { Menu as MenuIcon } from '@material-ui/icons'
+import { AppBar, Toolbar, IconButton, Typography, Button, MenuItem, Select, FormControl } from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Menu as MenuIcon } from '@mui/icons-material'
 import { useAuth } from '../contexts/Auth'
 import { useTheme } from '../contexts/Theme'
 import MyLocales, { SupportedLocales } from '../locales'
@@ -42,7 +43,12 @@ function Layout(props: any) {
     <div className={classes.root}>
       <AppBar position='static'>
         <Toolbar>
-          <IconButton className={classes.menuButton} edge='start' color='inherit' aria-label='menu'>
+          <IconButton
+            className={classes.menuButton}
+            edge='start'
+            color='inherit'
+            aria-label='menu'
+            size="large">
             <MenuIcon />
           </IconButton>
           <div className={classes.title}>
@@ -52,11 +58,11 @@ function Layout(props: any) {
               </Typography>
             </Button>
           </div>
-          <FormControl className={classes.menuButton}>
+          <FormControl className={classes.menuButton} variant='standard'>
             <Select
+              className={classes.localeSelect}
               inputProps={{
                 classes: {
-                  root: classes.localeSelect,
                   icon: classes.localeSelectIcon,
                 },
               }}

@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Grid, Divider, IconButton, Typography, Collapse } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { ExpandLess, ExpandMore } from '@material-ui/icons'
+import { Grid, Divider, IconButton, Typography, Collapse } from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 
 const useStyles = makeStyles(theme => createStyles({
   divider: {
@@ -16,7 +17,7 @@ function Paragraph(props: { title: string, className?: any, children?: any, fixe
 
   return (
     <div className={props.className}>
-      <Grid container justify='space-between'>
+      <Grid container justifyContent='space-between'>
         <Grid item>
           <Typography variant='h5' gutterBottom>
             {props.title}
@@ -24,7 +25,7 @@ function Paragraph(props: { title: string, className?: any, children?: any, fixe
         </Grid>
         <Grid item>
           {!props.fixed && (
-            <IconButton onClick={() => setOpen(!open)}>
+            <IconButton onClick={() => setOpen(!open)} size="large">
               {open ? <ExpandLess /> : <ExpandMore />}
             </IconButton>
           )}

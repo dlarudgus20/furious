@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { StyledEngineProvider } from '@mui/material/styles'
 import reportWebVitals from './reportWebVitals'
 import { Provider as ThemeProvider } from './contexts/Theme'
 import { Provider as AuthProvider } from './contexts/Auth'
@@ -15,19 +16,21 @@ import './index.css'
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider>
-        <AuthProvider>
-          <Layout>
-            <Switch>
-              <Route exact path='/' component={AppPage} />
-              <Route path='/signin' component={SignInPage} />
-              <Route path='/device/:id' component={DevicePage} />
-              <Route path='/new-device' component={NewDevicePage} />
-              <Route path='*' component={NotFoundPage} />
-            </Switch>
-          </Layout>
-        </AuthProvider>
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider>
+          <AuthProvider>
+            <Layout>
+              <Switch>
+                <Route exact path='/' component={AppPage} />
+                <Route path='/signin' component={SignInPage} />
+                <Route path='/device/:id' component={DevicePage} />
+                <Route path='/new-device' component={NewDevicePage} />
+                <Route path='*' component={NotFoundPage} />
+              </Switch>
+            </Layout>
+          </AuthProvider>
+        </ThemeProvider>
+      </StyledEngineProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

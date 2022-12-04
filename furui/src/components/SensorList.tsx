@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Card, CardContent, Typography, IconButton, Box, CardActions, Button, TextField } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { Add as AddIcon } from '@material-ui/icons'
+import { Card, CardContent, Typography, IconButton, Box, CardActions, Button, TextField } from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Add as AddIcon } from '@mui/icons-material'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { DeviceInfo, SensorInfo, NewSensorInfo, isSensorInfo } from 'furitype'
@@ -108,7 +109,7 @@ function SensorList(props: { className?: any, deviceInfo: DeviceInfo }) {
                     setSelectedSensor(undefined)
                     setOpen(true)
                   }}
-                >
+                  size="large">
                   <AddIcon />
                 </IconButton>
               </div>

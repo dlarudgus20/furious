@@ -1,8 +1,8 @@
 import React from 'react'
-import { Checkbox, FormControlLabel } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
-import { FavoriteBorder, Favorite } from '@material-ui/icons'
-import { green } from '@material-ui/core/colors'
+import { Checkbox, FormControlLabel } from '@mui/material'
+import withStyles from '@mui/styles/withStyles'
+import { FavoriteBorder, Favorite } from '@mui/icons-material'
+import { green } from '@mui/material/colors'
 
 const GreenCheckbox = withStyles({
   root: {

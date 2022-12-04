@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Card, CardContent, Typography, IconButton, Box, CardActions, Button } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { Add as AddIcon } from '@material-ui/icons'
+import { Card, CardContent, Typography, IconButton, Box, CardActions, Button } from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Add as AddIcon } from '@mui/icons-material'
 import axios from 'axios'
 import { DeviceInfo } from 'furitype'
 import Paragraph from '../components/Paragraph'
@@ -65,7 +66,7 @@ function DeviceList() {
                 <IconButton
                   style={{ width: '100%', height: '100%' }}
                   onClick={() => history.push('/new-device')}
-                >
+                  size="large">
                   <AddIcon />
                 </IconButton>
               </div>

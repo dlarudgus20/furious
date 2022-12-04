@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Typography } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { Typography } from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
 import { useAuth } from '../contexts/Auth'
 import { useTheme } from '../contexts/Theme'
 import DeviceList from '../components/DeviceList'

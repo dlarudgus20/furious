@@ -1,17 +1,22 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
-import * as MuiLocales from '@material-ui/core/locale'
+import { createTheme, ThemeProvider, Theme, StyledEngineProvider, adaptV4Theme } from '@mui/material/styles'
+import * as MuiLocales from '@mui/material/locale'
 import { Localization } from '../Localization'
 import MyLocales, { SupportedLocales } from '../locales'
 
-const theme = createMuiTheme({
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
+const theme = createTheme(adaptV4Theme({
   typography: {
     fontFamily: [
       'Arial',
       'sans-serif'
     ].join(',')
   },
-})
+}))
 
 interface ThemeCtx {
   locale: SupportedLocales,
@@ -46,15 +51,17 @@ export function Provider(props: any) {
   }, [])
 
   const themeWithLocale = useMemo(
-    () => createMuiTheme(theme, MuiLocales[context.locale]),
+    () => createTheme(adaptV4Theme(theme), MuiLocales[context.locale]),
     [context.locale])
 
   return (
-    <ThemeProvider theme={themeWithLocale}>
-      <ThemeContext.Provider value={context}>
-        {props.children}
-      </ThemeContext.Provider>
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={themeWithLocale}>
+        <ThemeContext.Provider value={context}>
+          {props.children}
+        </ThemeContext.Provider>
+      </ThemeProvider>
+    </StyledEngineProvider>
   )
 }
 

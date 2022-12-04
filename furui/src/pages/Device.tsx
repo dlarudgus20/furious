@@ -3,9 +3,10 @@ import { useHistory, useParams } from 'react-router-dom'
 import {
   Accordion, AccordionDetails, AccordionSummary, Box, Grid,
   CircularProgress, IconButton, TextField, Typography, Button
-} from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { Edit as EditIcon, Check, Clear, ExpandMore } from '@material-ui/icons'
+} from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Edit as EditIcon, Check, Clear, ExpandMore } from '@mui/icons-material'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import axios from 'axios'
 import { DeviceInfo } from 'furitype'
@@ -134,15 +135,15 @@ function DevicePage() {
               endAdornment:
                 editName ? (
                   <>
-                    <IconButton disabled={applying} onClick={cancelEdit}>
+                    <IconButton disabled={applying} onClick={cancelEdit} size="large">
                       <Clear />
                     </IconButton>
-                    <IconButton disabled={applying} onClick={applyEdit}>
+                    <IconButton disabled={applying} onClick={applyEdit} size="large">
                       <Check />
                     </IconButton>
                   </>
                 ) : (
-                  <IconButton disabled={applying} onClick={startEdit}>
+                  <IconButton disabled={applying} onClick={startEdit} size="large">
                     <EditIcon />
                   </IconButton>
                 )
@@ -161,7 +162,7 @@ function DevicePage() {
           </AccordionSummary>
           <AccordionDetails>
             {(openSecret && secret) ? (
-              <Grid container justify='space-between'>
+              <Grid container justifyContent='space-between'>
                 <Grid item>
                   <TextField
                     className={classes.item}

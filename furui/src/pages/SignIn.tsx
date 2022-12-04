@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, Divider, Grid, Paper, TextField, Typography } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { Button, Divider, Grid, Paper, TextField, Typography } from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
 import { useAuth } from '../contexts/Auth'
 
 const useStyles = makeStyles(theme => createStyles({
@@ -72,7 +73,7 @@ function SignInPage() {
   }
 
   return (
-    <Grid container justify='space-around'>
+    <Grid container justifyContent='space-around'>
       <Grid xs={12} sm={6} md={3} item>
         <Paper className={classes.form}>
           <Typography variant='h6' gutterBottom>
@@ -119,7 +120,7 @@ function SignInPage() {
             className={classes.formButtons}
             container
             direction='row'
-            justify='space-between'
+            justifyContent='space-between'
           >
             <Button
               color='secondary'
@@ -155,7 +156,7 @@ function SignInPage() {
               className={classes.formButtons}
               container
               direction='row-reverse'
-              justify='space-between'
+              justifyContent='space-between'
             >
               <Button
                 color='primary'

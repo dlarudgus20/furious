@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Card, CardContent, Typography, IconButton, Box, CardActions, Button } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { Add as AddIcon } from '@material-ui/icons'
+import { Card, CardContent, Typography, IconButton, Box, CardActions, Button } from '@mui/material'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Add as AddIcon } from '@mui/icons-material'
 import axios from 'axios'
 import { DeviceInfo, ControlInfo, NewControlInfo, isControlInfo } from 'furitype'
 import Paragraph from '../components/Paragraph'
@@ -119,7 +120,7 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
                     setSelectedControl(undefined)
                     setOpen(true)
                   }}
-                >
+                  size="large">
                   <AddIcon />
                 </IconButton>
               </div>
