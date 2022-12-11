@@ -8,7 +8,16 @@ import { logger } from './logger'
 
 type Timeout = ReturnType<typeof setTimeout>
 
-type Listener = () => (Promise<unknown> | unknown);
+export type Listener = () => (Promise<unknown> | unknown);
+
+export interface ListenOptions {
+  unchecked?: boolean,
+}
+
+interface ListenerInfo {
+  listener: Listener,
+  unchecked: boolean,
+}
 
 const baseURL = process.env.FURI_SERVER || 'http://localhost:8080'
 const retryInterval = 20000
@@ -46,7 +55,7 @@ export class Device {
 
   private queue = new PQueue({ concurrency: 1 })
 
-  private listenerMap = new Map<string, Listener[]>()
+  private listenerMap = new Map<string, ListenerInfo[]>()
 
   constructor(private id: number, private secret: string) {}
 
@@ -104,6 +113,16 @@ export class Device {
     this.descript = await this.openSSE(cookie)
     logger.info('connection established')
 
+    for (const [key, list] of this.listenerMap.entries()) {
+      if (!this.descript.controls.find(x => x.name === key)) {
+        for (const listener of list) {
+          if (!listener.unchecked) {
+            throw new InvalidControlName(key, listener.listener, 'listener to invalid control name')
+          }
+        }
+      }
+    }
+
     for (const info of this.descript.controls) {
       if (info.pressed) {
         this.onControlPress(info)
@@ -120,39 +139,41 @@ export class Device {
 
     return this.queue.add(async () => {
       if (this.sse === null || this.descript === null) {
-        return false
+        throw new Error('Device is not opened')
       }
 
       const info = this.descript.sensors.find(x => x.name === name)
       if (!info) {
-        return false
+        throw new Error('invalid sensor name')
       }
 
       try {
         await this.server.post(`/api/device/sensor/${info.id}`, { value: str })
-        return true
       } catch (err) {
-        logger.error(`sendSensor() error: ${err.stack}`)
-        return false
+        throw new Error(err.message)
       }
     })
   }
 
-  listenControl(name: string, listener: Listener) {
+  listenControl(name: string, listener: Listener): void;
+  listenControl(name: string, options: ListenOptions, listener: Listener): void;
+  listenControl(name: string, ...args: [Listener] | [ListenOptions, Listener]) {
+    const [options, listener] = args.length === 1 ? [{}, args[0]] : args
+
     const list = this.listenerMap.get(name) || []
 
     if (list.length === 0) {
       this.listenerMap.set(name, list)
     }
 
-    list.push(listener)
+    list.push({ listener, unchecked: !!options.unchecked })
   }
 
   unlistenControl(name: string, listener: Listener) {
     const list = this.listenerMap.get(name) || []
 
     while (true) {
-      const index = list.findIndex(x => x === listener)
+      const index = list.findIndex(x => x.listener === listener)
       if (index < 0) {
         break
       }
@@ -166,7 +187,7 @@ export class Device {
     for (const listener of list) {
       this.queue.add(async () => {
         try {
-          await Promise.resolve(listener())
+          await Promise.resolve(listener.listener())
         } catch (err) {
           logger.error(`Control ${info.name} handler error: ${err.stack}`)
         }
@@ -305,5 +326,12 @@ export class Device {
         }
       }
     }
+  }
+}
+
+export class InvalidControlName extends Error {
+  constructor(public controlName: string, public listener: Listener, msg: string) {
+    super(msg)
+    Object.setPrototypeOf(this, InvalidControlName.prototype)
   }
 }
