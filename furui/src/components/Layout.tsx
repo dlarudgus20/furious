@@ -74,7 +74,7 @@ function Layout(props: any) {
             >
               {Object.keys(MyLocales).map(locale => (
                 <MenuItem
-                  id={`locale-select-${locale}`}
+                  key={`locale-select-${locale}`}
                   value={locale}
                 >
                   {locale}
