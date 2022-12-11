@@ -13,6 +13,7 @@
             "outFiles": [
                 "${workspaceFolder}/furisrv/build/**/*.js"
             ],
+            "cwd": "${workspaceFolder}/furisrv",
             "console": "integratedTerminal"
         },
         {
@@ -24,6 +25,7 @@
             "outFiles": [
                 "${workspaceFolder}/micel/build/**/*.js"
             ],
+            "cwd": "${workspaceFolder}/micel",
             "console": "integratedTerminal"
         },
         {
@@ -38,6 +40,7 @@
             "request": "launch",
             "name": "wol-sender: Launch",
             "program": "${workspaceFolder}/wol-sender/index.js",
+            "cwd": "${workspaceFolder}/wol-sender",
             "console": "integratedTerminal"
         },
     ]
