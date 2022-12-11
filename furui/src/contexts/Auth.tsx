@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useMemo } from 'react'
 import axios from 'axios'
 
 interface AuthInfo {
@@ -7,17 +7,24 @@ interface AuthInfo {
   email: string
 }
 
-interface AuthCtx {
+interface AuthCtxData {
   initialized: boolean
   userInfo?: AuthInfo
+}
+
+interface AuthCtx extends AuthCtxData {
   signIn(email: string, pw: string): Promise<boolean>
   signUp(email: string, pw: string, name: string): Promise<boolean>
   changeName(name: string): Promise<void>
 }
 
-const defaultValue: AuthCtx = {
+const defaultData: AuthCtxData = {
   initialized: false,
   userInfo: undefined,
+}
+
+const defaultValue: AuthCtx = {
+  ...defaultData,
   signIn() { throw new Error() },
   signUp() { throw new Error() },
   changeName() { throw new Error() },
@@ -28,25 +35,27 @@ const AuthContext = createContext<AuthCtx>(defaultValue)
 export const useAuth = () => useContext(AuthContext)
 
 export function Provider(props: any) {
-  const [context, setContext] = useState<AuthCtx>(defaultValue)
+  const [contextData, setContextData] = useState(defaultData)
 
   useEffect(() => {
     async function checkAuth() {
       const { data } = await axios.get<AuthInfo | ''>('/api/front/auth')
-      setContext({ ...defaultValue, userInfo: data || undefined })
+      setContextData({
+        initialized: true,
+        userInfo: data || undefined
+      })
     }
     checkAuth()
   }, [])
 
-  useEffect(() => {
-    const functions = {
-      ...defaultValue,
-      userInfo: context.userInfo,
+  const context: AuthCtx = useMemo(() => {
+    return {
+      ...contextData,
       async signIn(email: string, pw: string) {
         try {
           const { data } = await axios.post<AuthInfo>('/api/front/auth/signIn', { email, pw })
-          setContext({
-            ...functions,
+          setContextData({
+            ...contextData,
             userInfo: data,
           })
           return true
@@ -57,8 +66,8 @@ export function Provider(props: any) {
       async signUp(email: string, pw: string, name: string) {
         try {
           const { data } = await axios.post<AuthInfo>('/api/front/auth/signUp', { email, pw, name })
-          setContext({
-            ...functions,
+          setContextData({
+            ...contextData,
             userInfo: data,
           })
           return true
@@ -68,15 +77,13 @@ export function Provider(props: any) {
       },
       async changeName(name: string) {
         await axios.post<AuthInfo>('/api/front/auth/changeName', { name })
-        setContext({
-          ...functions,
+        setContextData({
+          ...contextData,
           userInfo: { ...context.userInfo!, name: name },
         })
       },
     }
-
-    setContext(functions)
-  }, [context.userInfo])
+  }, [contextData])
 
   return (
     <AuthContext.Provider value={context}>

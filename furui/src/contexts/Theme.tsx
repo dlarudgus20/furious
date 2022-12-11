@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 import { createTheme, ThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles'
 import * as MuiLocales from '@mui/material/locale'
 import { Localization } from '../Localization'
@@ -18,15 +18,22 @@ const theme = createTheme({
   },
 })
 
-interface ThemeCtx {
+interface ThemeCtxData {
   locale: SupportedLocales,
+}
+
+interface ThemeCtx extends ThemeCtxData {
   getLocalization(): Localization,
   setLocale(locale: SupportedLocales): void,
 }
 
-const defaultValue: ThemeCtx = {
+const defaultData: ThemeCtxData = {
   locale: 'enUS',
-  getLocalization() { return MyLocales[this.locale] },
+}
+
+const defaultValue: ThemeCtx = {
+  ...defaultData,
+  getLocalization() { throw new Error() },
   setLocale(locale) { throw new Error() },
 }
 
@@ -35,18 +42,19 @@ const ThemeContext = createContext<ThemeCtx>(defaultValue)
 export const useTheme = () => useContext(ThemeContext)
 
 export function Provider(props: any) {
-  const [context, setContext] = useState<ThemeCtx>(defaultValue)
+  const [contextData, setContextData] = useState(defaultData)
 
-  useEffect(() => {
-    const functions: ThemeCtx = {
-      ...defaultValue,
-      setLocale(locale: SupportedLocales) {
-        setContext({ ...functions, locale })
+  const context: ThemeCtx = useMemo(() => {
+    return {
+      ...contextData,
+      getLocalization() {
+        return MyLocales[this.locale]
       },
+      setLocale(locale: SupportedLocales) {
+        setContextData({ ...contextData, locale })
+      }
     }
-
-    setContext(functions)
-  }, [])
+  }, [contextData])
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, MuiLocales[context.locale]),
