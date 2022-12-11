@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Card, CardContent, Typography, IconButton, Box, CardActions, Button, TextField } from '@mui/material'
+import { Card, CardContent, Typography, IconButton, Box, CardActions, Button, CircularProgress } from '@mui/material'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
 import { Add as AddIcon, Check } from '@mui/icons-material'
@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => createStyles({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  cardButton: {
+    'white-space': 'nowrap',
+  },
 }))
 
 function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
@@ -39,7 +42,9 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
   const [reload, setReload] = useState(true)
 
   const [open, setOpen] = useState(false)
-  const [selectedControl, setSelectedControl] = useState<ControlInfo | undefined>()
+  const [selectedId, setSelectedId] = useState<number | undefined>()
+
+  const [loadingControl, setLoadingControl] = useState<number | undefined>()
 
   useEffect(() => {
     async function retrieve() {
@@ -51,6 +56,10 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
     retrieve()
   }, [dvinfo, reload])
 
+  function doReload() {
+    setReload(!reload)
+  }
+
   async function handleSubmit(info: ControlInfo | NewControlInfo) {
     try {
       if (isControlInfo(info)) {
@@ -58,7 +67,7 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
       } else {
         await axios.post(`/api/front/dev/controls/${dvinfo.id}/create`, info)
       }
-      setReload(!reload)
+      doReload()
     } catch (err) {
       alert(`error: ${err}`)
     } finally {
@@ -69,7 +78,7 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
   async function handleDelete(info: ControlInfo) {
     try {
       await axios.post(`/api/front/dev/controls/${dvinfo.id}/delete/${info.id}`)
-      setReload(!reload)
+      doReload()
     } catch (err) {
       alert(`error: ${err}`)
     } finally {
@@ -79,17 +88,30 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
 
   async function handlePress(info: ControlInfo) {
     try {
+      setLoadingControl(info.id)
+
       await axios.post(`/api/front/dev/controls/${dvinfo.id}/press/${info.id}`)
-      setReload(!reload)
+      doReload()
     } catch (err) {
       alert(`error: ${err}`)
     } finally {
-      handleClose()
+      setLoadingControl(undefined)
+    }
+  }
+
+  async function handleClearLastUnpress(info: ControlInfo) {
+    try {
+      setLoadingControl(info.id)
+
+      await axios.post(`/api/front/dev/controls/${dvinfo.id}/clearLastUnpress/${info.id}`)
+      doReload()
+    } finally {
+      setLoadingControl(undefined)
     }
   }
 
   function handleClose() {
-    setSelectedControl(undefined)
+    setSelectedId(undefined)
     setOpen(false)
   }
 
@@ -105,9 +127,21 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
                 <ControlCard
                   key={key}
                   info={info}
-                  onClick={() => {
-                    setSelectedControl(info)
+                  pressButtonLabel={
+                    info.lastUnpress ? 'Clear' : 'Press'
+                  }
+                  pressButtonDisabled={!!loadingControl || info.pressed}
+                  pressProgress={loadingControl === info.id}
+                  onManage={() => {
+                    setSelectedId(info.id)
                     setOpen(true)
+                  }}
+                  onPress={() => {
+                    if (info.lastUnpress) {
+                      handleClearLastUnpress(info)
+                    } else {
+                      handlePress(info)
+                    }
                   }}
                 />
               )
@@ -117,7 +151,7 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
                 <IconButton
                   style={{ width: '100%', height: '100%' }}
                   onClick={() => {
-                    setSelectedControl(undefined)
+                    setSelectedId(undefined)
                     setOpen(true)
                   }}
                   size="large">
@@ -135,17 +169,23 @@ function ControlList(props: { className?: any, deviceInfo: DeviceInfo }) {
       <ControlDialog
         open={open}
         deviceInfo={props.deviceInfo}
-        info={selectedControl}
+        info={controlList?.find(x => x.id === selectedId)}
         onSubmit={handleSubmit}
         onDelete={handleDelete}
-        onPress={handlePress}
         onClose={handleClose}
       />
     </Paragraph>
   )
 }
 
-function ControlCard(props: { info: ControlInfo, onClick?: () => void }) {
+function ControlCard(props: {
+  info: ControlInfo,
+  pressButtonLabel: string,
+  pressButtonDisabled: boolean,
+  pressProgress: boolean,
+  onManage: () => void,
+  onPress: () => void,
+}) {
   const classes = useStyles()
 
   return (
@@ -166,9 +206,21 @@ function ControlCard(props: { info: ControlInfo, onClick?: () => void }) {
             props.info.lastUnpress ? <Check /> : undefined
           }
         />
+        {props.pressProgress ? (
+          <CircularProgress size='1.2rem' />
+        ) : (
+          <Button
+            variant='outlined'
+            color='secondary'
+            disabled={props.pressButtonDisabled}
+            onClick={props.onPress}
+          >
+            {props.pressButtonLabel}
+          </Button>
+        )}
       </CardContent>
       <CardActions>
-        <Button color='inherit' onClick={props.onClick}>
+        <Button color='inherit' onClick={props.onManage}>
           Click to manage
         </Button>
       </CardActions>

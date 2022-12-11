@@ -52,6 +52,12 @@ type ControlPressEvent = {
   press: boolean
 }
 
+type ControlClearLastUnressEvent ={
+  type: 'control'
+  subtype: 'clearLastUnpress'
+  cid: number
+}
+
 type ControlRenameEvent = {
   type: 'control'
   subtype: 'rename'
@@ -74,4 +80,4 @@ type ControlDeleteEvent = {
 export type Event =
   | StartEvent | OfflineEvent
   | SensorValueEvent | SensorRenameEvent | SensorCreationEvent | SensorDeleteEvent
-  | ControlPressEvent | ControlRenameEvent | ControlCreationEvent | ControlDeleteEvent
+  | ControlPressEvent | ControlClearLastUnressEvent | ControlRenameEvent | ControlCreationEvent | ControlDeleteEvent

@@ -588,4 +588,37 @@ router.post('/controls/:dvid/press/:cid', async ctx => {
   })
 })
 
+router.post('/controls/:dvid/clearLastUnpress/:cid', async ctx => {
+  const auth: AuthInfo | undefined = ctx.session?.auth
+
+  const dvid = parseInt(ctx.params.dvid)
+  const cid = parseInt(ctx.params.cid)
+
+  if (!auth) {
+    ctx.throw(401)
+    return
+  }
+  if (!dvid || !cid) {
+    ctx.throw(400)
+    return
+  }
+
+  await getTransaction(async conn => {
+    const result = await conn.run(
+      'UPDATE Controls SET LastUnpress = NULL '
+        + 'WHERE Id = ? AND LastUnpress IS NOT NULL AND Id IN ('
+        + 'SELECT Controls.Id FROM Controls JOIN Devices ON Controls.DeviceId = Devices.Id '
+        + 'WHERE Devices.Id = ? AND Devices.OwnerId = ?);',
+      cid, dvid, auth.id)
+
+    if (result.changes === 0) {
+      ctx.throw(400)
+    }
+
+    fireEvent(dvid, { type: 'control', subtype: 'clearLastUnpress', cid })
+
+    ctx.body = ''
+  })
+})
+
 export default router

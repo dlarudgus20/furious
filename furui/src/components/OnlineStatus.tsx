@@ -28,6 +28,7 @@ function OnlineStatus(props: {
   negativeLabel: string,
   icon?: React.ReactNode,
   checkedIcon?: React.ReactNode,
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void,
 }) {
   return (
     <FormControlLabel
@@ -36,7 +37,7 @@ function OnlineStatus(props: {
       control={
         <GreenCheckbox
           checked={props.value}
-          onChange={() => {}}
+          onChange={props.onChange}
           icon={props.icon || <FavoriteBorder />}
           checkedIcon={props.checkedIcon || <Favorite />}
         />

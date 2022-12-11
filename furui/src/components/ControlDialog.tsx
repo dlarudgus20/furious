@@ -15,7 +15,6 @@ function ControlDialog(props: {
   info?: ControlInfo,
   onSubmit(info: NewControlInfo | ControlInfo): void,
   onDelete(info: ControlInfo): void,
-  onPress(info: ControlInfo): void,
   onClose(): void,
 }) {
   const info = props.info
@@ -50,8 +49,8 @@ function ControlDialog(props: {
     <Dialog
       open={props.open}
       fullWidth
-      maxWidth='xs'
-      onClose={props.onClose}
+      maxWidth='sm'
+      onClose={() => props.onClose()}
     >
       <DialogTitle>
         {info ? `Control "${info.name}"` : 'New Control'} of Device "{props.deviceInfo.name}"
@@ -117,19 +116,9 @@ function ControlDialog(props: {
       </DialogContent>
       <DialogActions>
         {info && (
-          <>
-            <Button
-              variant='outlined'
-              color='secondary'
-              disabled={info.pressed}
-              onClick={() => props.onPress(info)}
-            >
-              Press Command
-            </Button>
-            <Button color='primary' onClick={() => props.onDelete(info)}>
-              Delete
-            </Button>
-          </>
+          <Button color='primary' onClick={() => props.onDelete(info)}>
+            Delete
+          </Button>
         )}
         <Button color='primary' onClick={handleSubmit}>
           Submit

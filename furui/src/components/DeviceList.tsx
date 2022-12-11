@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => createStyles({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  cardButton: {
+    'white-space': 'nowrap',
+  },
 }))
 
 function DeviceList() {
@@ -88,7 +91,7 @@ function DeviceCard(props: { info: DeviceInfo, onClick?: () => void }) {
   return (
     <Card className={classes.card} variant='outlined'>
       <CardContent>
-        <Typography variant='h6' gutterBottom>
+        <Typography variant='h6' noWrap gutterBottom>
           {props.info.name}
         </Typography>
         <OnlineStatus
@@ -98,7 +101,11 @@ function DeviceCard(props: { info: DeviceInfo, onClick?: () => void }) {
         />
       </CardContent>
       <CardActions>
-        <Button color='inherit' onClick={props.onClick}>
+        <Button
+          className={classes.cardButton}
+          color='inherit'
+          onClick={props.onClick}
+        >
           Click to manage
         </Button>
       </CardActions>

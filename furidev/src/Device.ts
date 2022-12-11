@@ -294,6 +294,15 @@ export class Device {
           }
           break
         }
+        case 'clearLastUnpress': {
+          const info = controls.find(x => x.id === data.cid)
+          if (info) {
+            info.lastUnpress = null
+          } else {
+            logger.error('controls: device descript mismatch')
+          }
+          break
+        }
       }
     }
   }

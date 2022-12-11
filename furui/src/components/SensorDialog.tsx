@@ -56,7 +56,7 @@ function SensorDialog(props: {
     <Dialog
       open={props.open}
       fullWidth
-      maxWidth='xs'
+      maxWidth='sm'
       onClose={props.onClose}
     >
       <DialogTitle>
@@ -91,11 +91,17 @@ function SensorDialog(props: {
               <TableRow>
                 <TableCell>LastUpdated</TableCell>
                 <TableCell>
-                  {info.lastUpdated && (
+                  {info.lastUpdated ? (
                     <TextField
                       label='Last Update Date'
                       value={dayjs.unix(info.lastUpdated).format('YYYY-MM-DDTHH:mm:ss.SSS')}
                       type='datetime-local'
+                      disabled
+                    />
+                  ) : (
+                    <TextField
+                      value='-'
+                      type='text'
                       disabled
                     />
                   )}
