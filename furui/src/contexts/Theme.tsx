@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { createTheme, ThemeProvider, Theme, StyledEngineProvider, adaptV4Theme } from '@mui/material/styles'
+import { createTheme, ThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles'
 import * as MuiLocales from '@mui/material/locale'
 import { Localization } from '../Localization'
 import MyLocales, { SupportedLocales } from '../locales'
@@ -9,14 +9,14 @@ declare module '@mui/styles/defaultTheme' {
   interface DefaultTheme extends Theme {}
 }
 
-const theme = createTheme(adaptV4Theme({
+const theme = createTheme({
   typography: {
     fontFamily: [
       'Arial',
       'sans-serif'
     ].join(',')
   },
-}))
+})
 
 interface ThemeCtx {
   locale: SupportedLocales,
@@ -40,18 +40,16 @@ export function Provider(props: any) {
   useEffect(() => {
     const functions: ThemeCtx = {
       ...defaultValue,
-      setLocale,
-    }
-
-    function setLocale(locale: SupportedLocales) {
-      setContext({ ...functions, locale })
+      setLocale(locale: SupportedLocales) {
+        setContext({ ...functions, locale })
+      },
     }
 
     setContext(functions)
   }, [])
 
   const themeWithLocale = useMemo(
-    () => createTheme(adaptV4Theme(theme), MuiLocales[context.locale]),
+    () => createTheme(theme, MuiLocales[context.locale]),
     [context.locale])
 
   return (

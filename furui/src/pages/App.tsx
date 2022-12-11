@@ -25,7 +25,7 @@ function AppPage() {
     if (auth.initialized && !auth.userInfo) {
       history.replace('/signin')
     }
-  }, [auth])
+  }, [auth, history])
 
   if (!auth.userInfo) {
     return <Typography>Loading...</Typography>

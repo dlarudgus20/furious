@@ -28,61 +28,58 @@ const AuthContext = createContext<AuthCtx>(defaultValue)
 export const useAuth = () => useContext(AuthContext)
 
 export function Provider(props: any) {
-  const [authInfo, setAuthInfo] = useState<AuthCtx>(defaultValue)
+  const [context, setContext] = useState<AuthCtx>(defaultValue)
 
   useEffect(() => {
     async function checkAuth() {
       const { data } = await axios.get<AuthInfo | ''>('/api/front/auth')
-
-      const functions = {
-        initialized: true,
-        signIn, signUp, changeName
-      }
-
-      async function signIn(email: string, pw: string) {
-        try {
-          const { data } = await axios.post<AuthInfo>('/api/front/auth/signIn', { email, pw })
-          setAuthInfo({
-            userInfo: data,
-            ...functions,
-          })
-          return true
-        } catch {
-          return false
-        }
-      }
-
-      async function signUp(email: string, pw: string, name: string) {
-        try {
-          const { data } = await axios.post<AuthInfo>('/api/front/auth/signUp', { email, pw, name })
-          setAuthInfo({
-            userInfo: data,
-            ...functions,
-          })
-          return true
-        } catch {
-          return false
-        }
-      }
-
-      async function changeName(name: string) {
-        await axios.post<AuthInfo>('/api/front/auth/changeName', { name })
-        setAuthInfo({
-          userInfo: { ...authInfo.userInfo!, name: name },
-          ...functions,
-        })
-      }
-
-      setAuthInfo({
-        userInfo: data || undefined,
-        ...functions,
-      })
+      setContext({ ...defaultValue, userInfo: data || undefined })
     }
     checkAuth()
   }, [])
 
+  useEffect(() => {
+    const functions = {
+      ...defaultValue,
+      userInfo: context.userInfo,
+      async signIn(email: string, pw: string) {
+        try {
+          const { data } = await axios.post<AuthInfo>('/api/front/auth/signIn', { email, pw })
+          setContext({
+            ...functions,
+            userInfo: data,
+          })
+          return true
+        } catch {
+          return false
+        }
+      },
+      async signUp(email: string, pw: string, name: string) {
+        try {
+          const { data } = await axios.post<AuthInfo>('/api/front/auth/signUp', { email, pw, name })
+          setContext({
+            ...functions,
+            userInfo: data,
+          })
+          return true
+        } catch {
+          return false
+        }
+      },
+      async changeName(name: string) {
+        await axios.post<AuthInfo>('/api/front/auth/changeName', { name })
+        setContext({
+          ...functions,
+          userInfo: { ...context.userInfo!, name: name },
+        })
+      },
+    }
+
+    setContext(functions)
+  }, [context.userInfo])
+
   return (
-    <AuthContext.Provider value={authInfo}>
+    <AuthContext.Provider value={context}>
       {props.children}
     </AuthContext.Provider>
   )
