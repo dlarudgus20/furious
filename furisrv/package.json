@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "bin": "build/entry.js",
+  "files": [
+    "build/**/*"
+  ],
   "scripts": {
     "build": "npm run build --prefix ../furui && npm run build-server",
     "build-server": "tsc",
-    "start": "npm run build-server && node build/index.js",
+    "start": "npm run build-server && node build/entry.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

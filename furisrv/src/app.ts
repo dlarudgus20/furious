@@ -14,7 +14,7 @@ import apiFrontScript from './api/front/script'
 import apiDevice from './api/device'
 import { logger } from './logger'
 
-const react = path.resolve(__dirname, CONFIG.FURUI_PUBLIC)
+const react = path.resolve(__dirname, '../', CONFIG.FURUI_PUBLIC)
 
 export const app = new Koa()
 
