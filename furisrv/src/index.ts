@@ -1,8 +1,9 @@
+import { CONFIG } from './config'
 import { app } from './app'
 import { initializeDatabase } from './db'
 import { logger } from './logger'
 
-const port = process.env.PORT || 8080
+const port = CONFIG.PORT
 
 async function main() {
   await initializeDatabase()

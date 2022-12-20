@@ -6,6 +6,7 @@ import session from 'koa-session'
 import serve from 'koa-static'
 import send from 'koa-send'
 import koaLogger from 'koa-logger'
+import { CONFIG } from './config'
 import { MemoryStore } from './MemoryStore'
 import apiFrontAuth from './api/front/auth'
 import apiFrontDev from './api/front/dev'
@@ -13,20 +14,24 @@ import apiFrontScript from './api/front/script'
 import apiDevice from './api/device'
 import { logger } from './logger'
 
-const react = path.join(__dirname, '../../furui/build')
+const react = path.resolve(__dirname, CONFIG.FURUI_PUBLIC)
 
 export const app = new Koa()
 
 const router = new Router()
 
-app.keys = ['wlBPZDPP8s']
+app.keys = [CONFIG.SESSION_SECRET]
 
 // uncaught exceptions
 app.use(async (ctx, next) => {
   try {
     await next()
   } catch (err) {
-    logger.error(err.stack)
+    if (err instanceof Error) {
+      logger.error(err.stack)
+    } else {
+      logger.error(err)
+    }
     throw err
   }
 })

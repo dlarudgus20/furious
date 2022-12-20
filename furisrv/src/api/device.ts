@@ -134,7 +134,7 @@ router.get('/start', async ctx => {
 router.post('/sensor/:id', async ctx => {
   const deviceInfo: DeviceInfo | undefined = ctx.session?.deviceInfo
   const id = parseInt(ctx.params.id)
-  const body = ctx.request.body
+  const body = ctx.request.body as any
 
   if (!deviceInfo) {
     ctx.throw(401)

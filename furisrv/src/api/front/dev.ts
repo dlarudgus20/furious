@@ -188,7 +188,11 @@ router.post('/changeName/:id', async ctx => {
       auth.name = name
       ctx.body = ''
     } catch (err) {
-      ctx.throw(400, err)
+      if (err instanceof Error) {
+        ctx.throw(400, err)
+      } else {
+        ctx.throw(400)
+      }
     }
   })
 })

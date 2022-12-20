@@ -150,7 +150,11 @@ export class Device {
       try {
         await this.server.post(`/api/device/sensor/${info.id}`, { value: str })
       } catch (err) {
-        throw new Error(err.message)
+        if (err instanceof Error) {
+          throw new Error(err.message)
+        } else {
+          throw err
+        }
       }
     })
   }
@@ -189,7 +193,11 @@ export class Device {
         try {
           await Promise.resolve(listener.listener())
         } catch (err) {
-          logger.error(`Control ${info.name} handler error: ${err.stack}`)
+          if (err instanceof Error) {
+            logger.error(`Control ${info.name} handler error: ${err.stack}`)
+          } else {
+            logger.error(`Control ${info.name} handler error: ${err}`)
+          }
         }
       })
     }
@@ -198,7 +206,11 @@ export class Device {
       try {
         await this.server.post(`/api/device/control/${info.id}/unpress`, {})
       } catch (err) {
-        logger.error(`control unpress error: ${err.stack}`)
+        if (err instanceof Error) {
+          logger.error(`control unpress error: ${err.stack}`)
+        } else {
+          logger.error(`control unpress error: ${err}`)
+        }
       }
     })
   }
