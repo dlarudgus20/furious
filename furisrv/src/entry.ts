@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { CONFIG } from './config'
 import { app } from './app'
 import { initializeDatabase } from './db'
