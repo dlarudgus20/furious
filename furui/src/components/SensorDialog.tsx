@@ -6,7 +6,7 @@ import {
 } from '@mui/material'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
-import { DeviceInfo, SensorInfo, NewSensorInfo } from 'furitype'
+import { DeviceInfo, SensorInfo, NewSensorInfo } from '@furious/furitype'
 
 function SensorDialog(props: {
   open: boolean,

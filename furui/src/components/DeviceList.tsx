@@ -5,7 +5,7 @@ import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
 import { Add as AddIcon } from '@mui/icons-material'
 import axios from 'axios'
-import { DeviceInfo } from 'furitype'
+import { DeviceInfo } from '@furious/furitype'
 import Paragraph from '../components/Paragraph'
 import OnlineStatus from '../components/OnlineStatus'
 

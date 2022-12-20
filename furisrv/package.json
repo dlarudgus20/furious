@@ -1,5 +1,5 @@
 {
-  "name": "furisrv",
+  "name": "@furious/furisrv",
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
@@ -26,10 +26,10 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
+    "@furious/furitype": "^1.0.0",
     "@types/node": "^15.12.4",
     "bcrypt": "^5.0.1",
     "dayjs": "^1.10.5",
-    "furitype": "file:../furitype",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-logger": "^3.2.1",

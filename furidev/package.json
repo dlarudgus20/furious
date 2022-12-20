@@ -1,5 +1,5 @@
 {
-  "name": "furidev",
+  "name": "@furious/furidev",
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
@@ -20,11 +20,11 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
+    "@furious/furitype": "^1.0.0",
     "@types/node": "^15.12.4",
     "axios": "^1.2.0",
     "axios-cookiejar-support": "^4.0.3",
     "eventsource": "^1.1.0",
-    "furitype": "file:../furitype",
     "p-queue": "^6.6.2",
     "tough-cookie": "^4.0.0",
     "winston": "^3.3.3"

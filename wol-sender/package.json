@@ -10,8 +10,8 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
+    "@furious/furidev": "^1.0.0",
     "dotenv": "^16.0.3",
-    "furidev": "file:../furidev",
     "onoff": "^6.0.3",
     "ping": "^0.4.2",
     "wake_on_lan": "^1.0.0"

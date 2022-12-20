@@ -1,5 +1,5 @@
 import Router from 'koa-router'
-import { DeviceInfo } from 'furitype'
+import { DeviceInfo } from '@furious/furitype'
 import { AuthInfo } from '../../types/auth'
 import { getTransaction } from '../../db'
 import { logger } from '../../logger'

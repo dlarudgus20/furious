@@ -1,6 +1,6 @@
 'use strict'
 
-const { Device, delay } = require('furidev')
+const { Device, delay } = require('@furious/furidev')
 const util = require('util')
 const dotenv = require('dotenv')
 const wol = require('wake_on_lan')

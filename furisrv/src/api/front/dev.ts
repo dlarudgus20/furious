@@ -5,7 +5,7 @@ import Router from 'koa-router'
 import {
   DeviceInfo, SensorInfo, NewSensorInfo, ControlInfo, NewControlInfo,
   isNewSensorInfo, isNewControlInfo
-} from 'furitype'
+} from '@furious/furitype'
 import { getTransaction } from '../../db'
 import { AuthInfo } from '../../types/auth'
 import { addListener, fireEvent } from '../../event'

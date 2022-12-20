@@ -2,7 +2,7 @@
 
 const { spawn } = require('child_process')
 const { Gpio } = require('onoff')
-const { Device, delay } = require('furidev')
+const { Device, delay } = require('@furious/furidev')
 
 const led = new Gpio(4, 'out')
 

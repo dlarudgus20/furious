@@ -1,4 +1,4 @@
-import { Device, delay } from 'furidev'
+import { Device, delay } from '@furious/furidev'
 import crypto from 'crypto'
 
 const id = 2

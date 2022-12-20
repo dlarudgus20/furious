@@ -6,7 +6,7 @@ import {
 } from '@mui/material'
 import { Check } from '@mui/icons-material'
 import dayjs from 'dayjs'
-import { DeviceInfo, ControlInfo, NewControlInfo } from 'furitype'
+import { DeviceInfo, ControlInfo, NewControlInfo } from '@furious/furitype'
 import OnlineStatus from './OnlineStatus'
 
 function ControlDialog(props: {

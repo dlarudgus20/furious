@@ -5,7 +5,7 @@ import makeStyles from '@mui/styles/makeStyles'
 import { Add as AddIcon } from '@mui/icons-material'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { DeviceInfo, SensorInfo, NewSensorInfo, isSensorInfo } from 'furitype'
+import { DeviceInfo, SensorInfo, NewSensorInfo, isSensorInfo } from '@furious/furitype'
 import Paragraph from '../components/Paragraph'
 import SensorDialog from './SensorDialog'
 

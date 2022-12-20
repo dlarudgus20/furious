@@ -3,7 +3,7 @@ import axios from 'axios'
 import { wrapper as cookieWrapper } from 'axios-cookiejar-support'
 import { CookieJar } from 'tough-cookie'
 import PQueue from 'p-queue'
-import { DeviceDescript, BootEvent, Event, ControlInfo } from 'furitype'
+import { DeviceDescript, BootEvent, Event, ControlInfo } from '@furious/furitype'
 import { logger } from './logger'
 
 type Timeout = ReturnType<typeof setTimeout>

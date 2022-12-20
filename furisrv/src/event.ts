@@ -1,5 +1,5 @@
 import { PassThrough } from 'stream'
-import { Event } from 'furitype'
+import { Event } from '@furious/furitype'
 
 const interval = 32000
 
