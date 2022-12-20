@@ -6,7 +6,8 @@
   "types": "build/index.d.ts",
   "bin": "build/entry.js",
   "files": [
-    "build/**/*"
+    "build/**/*",
+    "schema.sql"
   ],
   "scripts": {
     "build": "npm run build --prefix ../furui && npm run build-server",

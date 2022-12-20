@@ -4,12 +4,13 @@ import mkdirp from 'mkdirp'
 import sqlite3 from 'sqlite3'
 import { Database as SqliteDatabase } from 'sqlite'
 import PQueue from 'p-queue'
+import { CONFIG } from './config'
 import { logger } from './logger'
 
 type SqlDb = SqliteDatabase<sqlite3.Database, sqlite3.Statement>
 
-const dbDirectory = path.join(__dirname, '../etc')
-const dbFilename = path.join(dbDirectory, 'furisrv.db')
+const dbFilename = path.resolve(CONFIG.DB_FILE)
+const dbDirectory = path.dirname(dbFilename)
 
 const schemaFilename = path.join(__dirname, '../schema.sql')
 
